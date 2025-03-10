@@ -20,7 +20,7 @@ model User {
   lastName    String
   email       String     @unique
   password    String
-  phoneNumber String?  
+  phoneNumber String?   @unique
   positionId  Int?       
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
