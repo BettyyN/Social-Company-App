@@ -56,3 +56,19 @@ export async function POST(req: Request) {
     );
   }
 }
+export async function GET(req: Request) {
+  try {
+    const users = await db.user.findMany();
+
+    return NextResponse.json(
+      { user: users, message: "User fetched successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error in /api/user:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error", details: (error as Error).message },
+      { status: 500 }
+    );
+  }
+}
