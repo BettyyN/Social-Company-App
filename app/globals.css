@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "daisyui";
 
 @theme {
   --font-sans: var(--font-geist-sans);
@@ -6,8 +7,8 @@
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary-color: #6e2ccc; /* Your primary color */
+  --secondary-color: #f4f0ff; /* Your secondary color */
 }
 
 @media (prefers-color-scheme: dark) {
