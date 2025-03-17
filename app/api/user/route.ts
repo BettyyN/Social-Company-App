@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { hash } from "bcrypt";
-import { userSchema } from "@/app/schema/userSchema";
+import { userSchema } from "@/schema/userSchema";
 
 export async function POST(req: Request) {
   try {
