@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "../Components/reduxProvider";
 import { Toaster } from "sonner";
+import Provider from "@/Components/provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,8 +33,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         cz-shortcut-listen="true"
       >
-        <ReduxProvider>{children}</ReduxProvider>
-        <Toaster position="top-center" richColors />
+        <Provider>
+          <ReduxProvider>{children}</ReduxProvider>
+          <Toaster position="top-center" richColors />
+        </Provider>
       </body>
     </html>
   );
