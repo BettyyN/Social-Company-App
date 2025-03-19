@@ -41,6 +41,7 @@ export default function SignupForm() {
     try {
       console.log("Submitting:", data);
       await signup(data).unwrap();
+      router.refresh();
       router.push("/auth/login");
     } catch (err: any) {
       console.error("Signup failed:", err);
@@ -63,6 +64,7 @@ export default function SignupForm() {
           {/** First Name */}
           <div className="relative">
             <input
+              placeholder="jhon"
               type="text"
               {...register("firstName")}
               className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
@@ -72,7 +74,7 @@ export default function SignupForm() {
               }`}
             />
             <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
-              First Name
+              First Name *
             </label>
             {errors.firstName && (
               <p className="text-red-500 text-xs mt-1">
@@ -84,6 +86,7 @@ export default function SignupForm() {
           {/** Last Name */}
           <div className="relative">
             <input
+              placeholder="doe"
               type="text"
               {...register("lastName")}
               className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
@@ -93,7 +96,7 @@ export default function SignupForm() {
               }`}
             />
             <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
-              Last Name
+              Last Name *
             </label>
             {errors.lastName && (
               <p className="text-red-500 text-xs mt-1">
@@ -106,6 +109,7 @@ export default function SignupForm() {
           <div className="relative">
             <input
               type="email"
+              placeholder="doe@gmail.com"
               {...register("email")}
               className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
                 errors.email
@@ -114,7 +118,7 @@ export default function SignupForm() {
               }`}
             />
             <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
-              Email
+              Email *
             </label>
             {errors.email && (
               <p className="text-red-500 text-xs mt-1">
@@ -126,6 +130,7 @@ export default function SignupForm() {
           {/** Phone Number */}
           <div className="relative">
             <input
+              placeholder="+251"
               type="tel"
               {...register("phoneNumber")}
               className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
@@ -135,7 +140,7 @@ export default function SignupForm() {
               }`}
             />
             <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
-              Phone Number
+              Phone Number *
             </label>
             {errors.phoneNumber && (
               <p className="text-red-500 text-xs mt-1">
@@ -156,14 +161,14 @@ export default function SignupForm() {
               }`}
             />
             <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
-              Password
+              Password *
             </label>
             <button
               type="button"
               className="absolute right-3 top-4"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
             </button>
             {errors.password && (
               <p className="text-red-500 text-xs mt-1">
@@ -184,14 +189,14 @@ export default function SignupForm() {
               }`}
             />
             <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
-              Confirm Password
+              Confirm Password *
             </label>
             <button
               type="button"
               className="absolute right-3 top-4"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
-              {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
             </button>
             {errors.confirmPassword && (
               <p className="text-red-500 text-xs mt-1">
