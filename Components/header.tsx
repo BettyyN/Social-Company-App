@@ -1,86 +1,102 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
+export default function Header() {
+  const [isOpen, setIsOpen] = useState(false);
 
-export default function header() {
   return (
     <>
-      <div className="navbar shadow-sm bg-transparent">
-        <div className="navbar-start">
-          <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                {" "}
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h8m-8 6h16"
-                />{" "}
-              </svg>
-            </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-            >
-              <li>
-                <a>Item 1</a>
-              </li>
-              <li>
-                <a>Parent</a>
-                <ul className="p-2">
-                  <li>
-                    <a>Submenu 1</a>
-                  </li>
-                  <li>
-                    <a>Submenu 2</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a>Item 3</a>
-              </li>
-            </ul>
-          </div>
-          <a className="btn btn-ghost text-xl">daisyUI</a>
-        </div>
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
+      <header className="shadow-sm bg-primary text-primary opacity-80">
+        <nav className="container mx-auto flex items-center justify-between p-2">
+          {/* Logo */}
+          <Link href="/" className="text-2xl font-semibold text-white">
+            MyApp
+          </Link>
+
+          {/* Desktop Menu */}
+          <ul className="hidden space-x-6 lg:flex text-white">
             <li>
-              <a>Item 1</a>
+              <Link href="/" className="hover:text-white">
+                Home
+              </Link>
             </li>
             <li>
-              <details>
-                <summary>Parent</summary>
-                <ul className="p-2">
-                  <li>
-                    <a>Submenu 1</a>
-                  </li>
-                  <li>
-                    <a>Submenu 2</a>
-                  </li>
-                </ul>
-              </details>
+              <Link href="/about" className="hover:text-white">
+                About
+              </Link>
             </li>
             <li>
-              <a>Item 3</a>
+              <Link href="/contact" className="hover:text-white">
+                Contact
+              </Link>
             </li>
           </ul>
-        </div>
-        <div className="navbar-end space-x-2.5">
-          <Link href="/auth/signup" className="btn">
-            Sign Up
-          </Link>
-          <Link href="/auth/login" className="btn">
-            Log In
-          </Link>
-        </div>
-      </div>
+
+          {/* Buttons */}
+          <div className="hidden space-x-4 lg:flex">
+            <Link
+              href="/auth/signup"
+              className="px-4 py-2 rounded bg-primary text-white hover:bg-opacity-80"
+            >
+              Sign Up
+            </Link>
+            <Link
+              href="/auth/login"
+              className="px-4 py-2 rounded border border-primary text-white hover:bg-primary hover:text-white"
+            >
+              Log In
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="lg:hidden text-white "
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            ☰
+          </button>
+        </nav>
+      </header>
+      {/* Mobile Menu */}
+      {isOpen && (
+        <ul className="lg:hidden flex flex-col items-start space-y-2 pl-5 p-3 text-primary w-1/3 bg-secondary absolute left-0">
+          <li>
+            <Link href="/" className="hover:text-white">
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link href="/about" className="hover:text-white">
+              About
+            </Link>
+          </li>
+          <li>
+            <Link href="/contact" className="hover:text-white">
+              Contact
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/auth/signup"
+              className="block w-full text-center md:px-4 px-2 py-1 md:py-2 rounded bg-primary text-white hover:bg-opacity-80 hover:scale-103"
+            >
+              Sign Up
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/auth/login"
+              className="block w-full text-center md:px-4 px-3 py-1 md:py-2 rounded border bg-primary text-white hover:scale-103 hover:text-white"
+            >
+              Log In
+            </Link>
+          </li>
+        </ul>
+      )}
     </>
   );
 }
