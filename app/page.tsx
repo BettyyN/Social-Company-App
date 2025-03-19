@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 export default function Home() {
   return (
     <main className="bg-[#380F71]">
-      <div className="hero min-h-screen relative">
+      <div className=" min-h-screen relative">
         {/* Apply blur and transparency to the image */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -25,9 +25,9 @@ export default function Home() {
           <Header />
         </div>
 
-        <div className="hero-content text-neutral-content text-center relative z-10">
-          <div className="max-w-md md:max-w-xl">
-            <h1 className="mb-5 md:text-5xl text-2xl font-bold text-[#6b1ed6] text-">
+        <div className=" text-neutral-content relative z-10  flex items-center justify-center text-center min-h-screen">
+          <div className=" max-w-md md:max-w-xl ">
+            <h1 className="mb-5 md:text-5xl text-2xl font-bold text-[#7300ff] text-">
               Selam,
             </h1>
             <h2 className="mb-5 md:text-5xl font-bold">
@@ -39,12 +39,12 @@ export default function Home() {
               et a id nisi.
             </p>
             <Link href="/auth/signup">
-              <button className="bg-[#380F71] text-white rounded-lg w-40 h-12 shadow-md transition-transform duration-300 hover:scale-105 sm:w-32 sm:h-10 md:w-36 md:h-11 lg:w-40 lg:h-12">
+              <button className="bg-[#7300ff] text-white rounded-lg w-40 h-12 shadow-md transition-transform duration-300 hover:scale-105 sm:w-32 sm:h-10 md:w-36 md:h-11 lg:w-40 lg:h-12">
                 Register
               </button>
             </Link>
             <Link href="/home">
-              <button className="bg-[#380F71] text-white rounded-lg w-40 h-12 shadow-md transition-transform duration-300 hover:scale-105 sm:w-32 sm:h-10 md:w-36 md:h-11 lg:w-40 lg:h-12 ml-5">
+              <button className="bg-[#7300ff] text-white rounded-lg w-40 h-12 shadow-md transition-transform duration-300 hover:scale-105 sm:w-32 sm:h-10 md:w-36 md:h-11 lg:w-40 lg:h-12 ml-5">
                 Home
               </button>
             </Link>
