@@ -40,6 +40,7 @@ export const authOptions: NextAuthOptions = {
         if(!isValid){
             return null;
         }
+        console.log("User Data from DB:", existingUser);
 
         return {
           id:`${ existingUser.id}`,
@@ -53,21 +54,25 @@ export const authOptions: NextAuthOptions = {
   callbacks:{
     async jwt({token, user}){
         if(user){
-            return{
-                ...token,
-                phoneNumber: user.phoneNumber,
-        }
+            return {
+              ...token,
+              phoneNumber: user.phoneNumber,
+              firstName: user.firstName,
+              lastName: user.lastName,
+            };
         }
         return token;
     },
     async session({session, user, token}){
-        return{
-            ...session,
-            user:{
-                ...session.user,
-                phoneNumber: token.phoneNumber,
-            }
-        }
+        return {
+          ...session,
+          user: {
+            ...session.user,
+            phoneNumber: token.phoneNumber,
+            firstName: token.firstName,
+            lastName: token.lastName,
+          },
+        };
     }
   }
 };
