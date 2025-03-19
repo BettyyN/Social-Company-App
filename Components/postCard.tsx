@@ -3,7 +3,7 @@
 export default function postCard() {
   return (
     <div>  
-      <div className="card card-side bg-base-100 shadow-sm">
+      <div className="bg-base-100 shadow-sm p-3">
         <figure>
           <img
             src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
