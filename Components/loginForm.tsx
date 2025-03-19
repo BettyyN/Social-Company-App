@@ -5,14 +5,12 @@ import { z } from "zod";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 // Zod schema for login validation
 const loginSchema = z.object({
-  phoneNumber: z
-    .string()
-    .min(1, "phoneNumber  is required")
-    .regex(/^(\+251[79]\d{8}|0[79]\d{8})$/, "Invalid phone number format"),
-  password: z.string().min(6, "Password must be at least 6 characters long"),
+  phoneNumber: z.string().min(1, "phoneNumber  is required"),
+  password: z.string().min(1, "Password is required"),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -110,6 +108,15 @@ export default function LoginForm() {
             Login
           </button>
         </form>
+        <h1 className="text-sm font-semibold text-center text-gray-700 mt-6">
+          Didn't have an account?{" "}
+          <Link
+            href="/auth/signup"
+            className="hover:underline text-[#7300ff]"
+          >
+            Sign Up
+          </Link>
+        </h1>
       </div>
     </div>
   );
