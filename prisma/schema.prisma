@@ -15,102 +15,209 @@ datasource db {
 }
 
 model User {
-  id          Int        @id @default(autoincrement())
-  firstName   String
-  lastName    String
-  email       String     @unique
-  password    String
-  phoneNumber String?   @unique
-  positionId  Int?       
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-
-  // Relations
-  position    Position?  @relation(fields: [positionId], references: [id])
-  posts       Post[]
-  comments    Comment[]
-  likes       Like[]
+  id            Int          @id @default(autoincrement())
+  firstName     String
+  baptismalName String?
+  lastName      String
+  email         String?       @unique
+  password      String
+  phoneNumber   String     @unique
+  profilePicture String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  
+  // Relationships
+  role          Role         @relation(fields: [roleId], references: [id])
+  roleId        Int
+  batch         Batch?       @relation(fields: [batchId], references: [id])
+  batchId       Int?
+  team          Team?        @relation(fields: [teamId], references: [id])
+  teamId        Int?
+  posts         Post[]
+  comments      Comment[]
+  likes         Like[]
+  tags          UserTag[]
+  advertisements Advertisement[]
   notifications Notification[]
-  tasks       Task[]
-  groupMembers GroupMember[]
+  chats         ChatMember[]
+  sentMessages  Message[]    @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+
+  @@index([email, baptismalName])
 }
 
-model Position {  
-  id    Int    @id @default(autoincrement())
-  name  String @unique
+model Role {
+  id    Int      @id @default(autoincrement())
+  role  RoleType @unique @default(STUDENT)
   users User[]
 }
 
-model Post {
+model Batch {
   id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
-  userId    Int
-  createdAt DateTime @default(now())
+  name      String   @unique
+  startDate DateTime
+  endDate   DateTime
+  teams     Team[]
+  students  User[]
+  events    Event[]
+}
 
-  // Relations
-  user      User     @relation(fields: [userId], references: [id])
-  comments  Comment[]
-  likes     Like[]
+model Team {
+  id        Int      @id @default(autoincrement())
+  name      String
+  stage     Stage    @default(BEGINNER)
+  batch     Batch    @relation(fields: [batchId], references: [id])
+  batchId   Int
+  members   User[]
+  posts     Post[]
+  chats     Chat[]
+}
+
+model Event {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  type        EventType
+  date        DateTime
+  batch       Batch?    @relation(fields: [batchId], references: [id])
+  batchId     Int?
+  posts       Post[]
+}
+
+model Advertisement {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  status      ModStatus @default(PENDING)
+  author      User      @relation(fields: [authorId], references: [id])
+  authorId    Int
+  createdAt   DateTime  @default(now())
+}
+
+model Post {
+  id          Int       @id @default(autoincrement())
+  title       String
+  content     String?
+  images      PostImage[]
+  type        PostType  @default(GENERAL)
+  author      User      @relation(fields: [authorId], references: [id])
+  authorId    Int
+  team        Team?     @relation(fields: [teamId], references: [id])
+  teamId      Int?
+  event       Event?    @relation(fields: [eventId], references: [id])
+  eventId     Int?
+  tags        UserTag[]
+  comments    Comment[]
+  likes       Like[]
+  createdAt   DateTime  @default(now())
+
+}
+
+model PostImage {
+  id   Int    @id @default(autoincrement())
+  url String
+  post Post  @relation(fields: [postId], references: [id])
+  postId Int
+}
+
+model UserTag {
+  id     Int  @id @default(autoincrement())
+  post   Post @relation(fields: [postId], references: [id])
+  postId Int
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
 }
 
 model Comment {
   id        Int      @id @default(autoincrement())
   content   String
-  userId    Int
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  post      Post     @relation(fields: [postId], references: [id])
   postId    Int
   createdAt DateTime @default(now())
-
-  // Relations
-  user      User     @relation(fields: [userId], references: [id])
-  post      Post     @relation(fields: [postId], references: [id])
 }
 
 model Like {
   id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
   userId    Int
+  post      Post     @relation(fields: [postId], references: [id])
   postId    Int
   createdAt DateTime @default(now())
-
-  // Relations
-  user      User     @relation(fields: [userId], references: [id])
-  post      Post     @relation(fields: [postId], references: [id])
 }
 
 model Notification {
   id        Int      @id @default(autoincrement())
   message   String
+  user      User     @relation(fields: [userId], references: [id])
   userId    Int
   createdAt DateTime @default(now())
-
-  // Relations
-  user      User     @relation(fields: [userId], references: [id])
+  read      Boolean  @default(false)
 }
 
-model Task {
-  id         Int      @id @default(autoincrement())
-  title      String
-  deadline   DateTime
-  progress   String   @default("Pending") // Pending, In Progress, Completed
-  userId     Int
-  createdAt  DateTime @default(now())
-
-  // Relations
-  user       User     @relation(fields: [userId], references: [id])
+model Chat {
+  id        Int           @id @default(autoincrement())
+  name      String?
+  type      ChatType      @default(TEAM)
+  team      Team?         @relation(fields: [teamId], references: [id])
+  teamId    Int?
+  members   ChatMember[]
+  messages  Message[]
 }
 
-model GroupMember {
-  id      Int    @id @default(autoincrement())
-  userId  Int
-  groupId Int
-
-  // Relations
-  user    User   @relation(fields: [userId], references: [id])
-  group   Group  @relation(fields: [groupId], references: [id])
+model ChatMember {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+  chat   Chat @relation(fields: [chatId], references: [id])
+  chatId Int
 }
 
-model Group {
-  id      Int           @id @default(autoincrement())
-  name    String
-  members GroupMember[]
+model Message {
+  id        Int      @id @default(autoincrement())
+  content   String
+  sender    User     @relation(fields: [senderId], references: [id], name: "SentMessages")
+  senderId  Int
+  receiver  User?    @relation(fields: [receiverId], references: [id], name: "ReceivedMessages")
+  receiverId Int?
+  chat      Chat     @relation(fields: [chatId], references: [id])
+  chatId    Int
+  createdAt DateTime @default(now())
+}
+
+// Enums
+enum RoleType {
+  STUDENT
+  TEACHER
+  ADMIN
+  OTHER
+}
+
+enum Stage {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum EventType {
+  WEEKLY
+  MONTHLY
+}
+
+enum PostType {
+  GENERAL
+  TEAM
+  EVENT
+}
+
+enum ChatType {
+  TEAM
+  PRIVATE
+}
+
+enum ModStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
