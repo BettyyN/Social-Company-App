@@ -57,7 +57,7 @@ export async function PUT(
   }
   try {
     const body = await req.json();
-    const { email, firstName, lastName, password, positionId, phoneNumber } =
+    const { email, firstName, lastName, password, baptismalName, phoneNumber, role } =
       userSchema.parse(body);
 
     // Check if user exists
@@ -77,7 +77,7 @@ export async function PUT(
         lastName,
         email,
         phoneNumber,
-        position: positionId ? { connect: { id: positionId } } : undefined,
+        baptismalName,
         password: hashedPassword,
       },
     });
