@@ -6,46 +6,57 @@ import { userSchema } from "@/schema/userSchema";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { email, firstName, lastName, password, positionId, phoneNumber } =
+    const { email, firstName, lastName, password, baptismalName, phoneNumber,role } =
       userSchema.parse(body);
+     const roleRecord = await db.role.findFirst({
+       where: { role: role }, // Match your schema's role name field
+     });
 
-    //check if email already exists
-    const existingUserByEmail = await db.user.findUnique({
-      where: { email: email },
-    });
-    if (existingUserByEmail) {
+     if (!roleRecord) {
+       return NextResponse.json(
+         { error: "Invalid role specified" },
+         { status: 400 }
+       );
+     }
+
+    // Check for existing users
+    const [existingEmail, existingPhone] = await Promise.all([
+      db.user.findUnique({ where: { email } }),
+      db.user.findUnique({ where: { phoneNumber } }),
+    ]);
+
+    if (existingEmail || existingPhone) {
       return NextResponse.json(
-        { user: null, message: "User with this email already exists" },
+        {
+          user: null,
+          message: existingEmail
+            ? "User with this email already exists"
+            : "User with this phone number already exists",
+        },
         { status: 409 }
       );
     }
 
-    const existingUserByphoneNumber = await db.user.findUnique({
-      where: { phoneNumber: phoneNumber },
-    });
-    if (existingUserByphoneNumber) {
-      return NextResponse.json(
-        { user: null, message: "User with this phone number already exists" },
-        { status: 409 }
-      );
-    }
-
+    // Create new user with role connection
     const hashedPassword = await hash(password, 10);
     const newUser = await db.user.create({
       data: {
         firstName,
         lastName,
-        email,
+        email: email || null, 
         phoneNumber,
-        position: positionId ? { connect: { id: positionId } } : undefined,
+        baptismalName: baptismalName || null,
         password: hashedPassword,
+        role: {
+          connect: { id: roleRecord.id }
+        }
       },
     });
 
-    const { password: newUserPassword, ...rest } = newUser;
+    const { password: _, ...userWithoutPassword } = newUser;
 
     return NextResponse.json(
-      { user: rest, message: "User Created Successfully" },
+      { user: userWithoutPassword, message: "User Created Successfully" },
       { status: 201 }
     );
   } catch (error) {
@@ -56,16 +67,88 @@ export async function POST(req: Request) {
     );
   }
 }
+
+
 export async function GET(req: Request) {
   try {
-    const users = await db.user.findMany();
+    const { searchParams } = new URL(req.url);
+    
+    // Get query parameters
+    const id = searchParams.get("id");
+    const search = searchParams.get("search");
+    const phone = searchParams.get("phone");
 
-    return NextResponse.json(
-      { user: users, message: "User fetched successfully" },
-      { status: 200 }
-    );
+    // Base query with role inclusion
+    const baseQuery = {
+      include: {
+        role: true,
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        baptismalName: true,
+        email: true,
+        phoneNumber: true,
+        createdAt: true,
+        role: true,
+      }
+    };
+
+    // Get by ID
+    if (id) {
+      const user = await db.user.findUnique({
+        where: { id: Number(id) },
+        include: {
+          role: true,
+        },
+      });
+
+      if (!user) {
+        return NextResponse.json(
+          { message: "User not found" },
+          { status: 404 }
+        );
+      }
+
+      return NextResponse.json(user);
+    }
+
+    // Search functionality
+    let whereClause = {};
+    
+    if (search) {
+      whereClause = {
+        OR: [
+          { firstName: { contains: search, mode: 'insensitive' } },
+          { lastName: { contains: search, mode: 'insensitive' } },
+          { baptismalName: { contains: search, mode: 'insensitive' } }
+        ]
+      };
+    }
+
+    if (phone) {
+      whereClause = {
+        ...whereClause,
+        phoneNumber: { contains: phone }
+      };
+    }
+
+    // Get all users with optional filters
+    const users = await db.user.findMany({
+      where: whereClause,
+      orderBy: {
+        createdAt: 'desc'
+      },
+      include: {
+        role: true,
+      }
+    });
+
+    return NextResponse.json(users);
+
   } catch (error) {
-    console.error("Error in /api/user:", error);
+    console.error("Error in /api/user GET:", error);
     return NextResponse.json(
       { error: "Internal Server Error", details: (error as Error).message },
       { status: 500 }
