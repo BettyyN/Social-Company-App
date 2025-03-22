@@ -24,7 +24,7 @@ export default function SignupForm() {
       lastName: "",
       email: "",
       phoneNumber: "",
-      // baptismalName: "",
+      baptismalName: "",
       password: "",
       confirmPassword: "",
     },
@@ -36,19 +36,27 @@ export default function SignupForm() {
 
   const [signup, { isLoading, error }] = useSignupMutation();
 
-  // In your onSubmit function, update the error handling:
+ 
   const onSubmit = async (data: UserFormData) => {
+    console.log("form",data)
     try {
-      console.log("Submitting:", data);
-      await signup(data).unwrap();
-      router.refresh();
-      router.push("/auth/login");
+      const response = await signup({
+        ...data,
+        role: "STUDENT",
+      }).unwrap();
+console.log("form", data);
+      if (response.success) {
+        toast.success("Account created successfully!");
+        router.push("/auth/login");
+      }
     } catch (err: any) {
-      console.error("Signup failed:", err);
-      toast.error(`Signup failed: ${err?.data?.message || err?.error || "Unknown error"}`);
-    
+      console.error("Signup error:", err);
+      toast.error(
+        err.data?.message || "Registration failed. Please try again."
+      );
     }
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -104,6 +112,28 @@ export default function SignupForm() {
               </p>
             )}
           </div>
+
+          <div className="relative">
+            <input
+              placeholder="John"
+              type="text"
+              {...register("baptismalName")}
+              className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
+                errors.baptismalName
+                  ? "border-red-400 focus:ring-red-400"
+                  : "border-gray-300 focus:ring-purple-500"
+              }`}
+            />
+            <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
+              Baptismal Name *
+            </label>
+            {errors.baptismalName && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.baptismalName?.message}
+              </p>
+            )}
+          </div>
+
 
           {/** Email */}
           <div className="relative">
@@ -204,19 +234,23 @@ export default function SignupForm() {
               </p>
             )}
           </div>
-          <button
-            type="submit"
-            className="w-full bg-[#7300ff] text-white py-3 mx-5 rounded-md shadow-md hover:scale-105 transition-transform mt-6 flex items-center justify-center gap-2"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <Loader size={20} className="animate-spin" />
-              </>
-            ) : (
-              "Create Account"
-            )}
-          </button>
+
+          <div></div>
+          <div className="relative w-full">
+            <button
+              type="submit"
+              className="w-full bg-[#7300ff] text-white py-3 mx-5 rounded-md shadow-md hover:scale-105 transition-transform mt-6 flex items-center justify-center gap-2"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Loader size={20} className="animate-spin" />
+                </>
+              ) : (
+                "Create Account"
+              )}
+            </button>
+          </div>
         </form>
       </div>
     </div>
