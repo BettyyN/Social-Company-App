@@ -1,3 +1,4 @@
+import { RoleType } from "@prisma/client";
 import { z } from "zod";
 
 export const userSchema = z
@@ -17,7 +18,7 @@ export const userSchema = z
       .string()
       .min(2, "Baptismal Name must be at least 2 characters")
       .optional(),
-    role: z.enum(["STUDENT", "TEACHER", "ADMIN", "OTHER"]) ,
+    role: z.nativeEnum(RoleType),
     password: z
       .string()
       .min(6, "Password must be at least 6 characters")
@@ -26,6 +27,17 @@ export const userSchema = z
         "Password must contain at least one letter and one number"
       ),
     confirmPassword: z.string().min(1, "Confirm Password is required"),
+    profilePicture: z
+      .instanceof(File)
+      .optional()
+      .refine((file) => {
+        if (!file) return true; // If no file is provided, skip validation
+        const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+        const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "image/gif"];
+        return (
+          file.size <= MAX_FILE_SIZE && ACCEPTED_FILE_TYPES.includes(file.type)
+        );
+      }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -33,3 +45,12 @@ export const userSchema = z
   });
 
 export type UserFormData = z.infer<typeof userSchema>;
+
+export const userSchemaPartial = z.object(
+  Object.fromEntries(
+    Object.entries(userSchema.innerType().shape).map(([key, value]) => [
+      key,
+      value.optional(),
+    ])
+  )
+);

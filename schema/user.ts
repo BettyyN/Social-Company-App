@@ -1,3 +1,4 @@
+import { RoleType } from "@prisma/client";
 import { z } from "zod";
 
 export const user = z
@@ -11,9 +12,9 @@ export const user = z
       .regex(/^(\+251[79]\d{8}|0[79]\d{8})$/, "Invalid phone number format")
 
       .max(13, "phone number not correct"),
-    // baptismalName: z
-    //   .string()
-    //   .min(2, "Baptismal Name must be at least 2 characters"),
+    baptismalName: z
+      .string()
+      .min(2, "Baptismal Name must be at least 2 characters"),
     password: z
       .string()
       .min(6, "Password must be at least 6 characters")
