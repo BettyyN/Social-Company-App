@@ -4,7 +4,7 @@ import SignupForm from "@/Components/signUpForm";
 export default function page() {
   return (
     <>
-      <div className="bg-gradient-to-bl from-[#6000DA] to-[#A270FF] ">
+      <div className="bg-slate-50">
         <Header />
         <div className="min-h-screen flex lg:flex-row flex-col">
           <div className="lg:w-1/3 w-full">
