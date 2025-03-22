@@ -6,8 +6,9 @@ export default function postCard() {
       <div className="bg-base-100 shadow-sm p-3">
         <figure>
           <img
-            src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
+            src="nature.jpg"
             alt="Movie"
+            className="w-56 h-72"
           />
         </figure>
         <div className="card-body">
