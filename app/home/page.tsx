@@ -21,16 +21,7 @@ export default async function page() {
           <div className="flex-1 overflow-y-auto transition-margin duration-300">
             <HomeHeader />
             <PostCard />
-            <PostCard />
-            <PostCard />
-            <PostCard />
-            <PostCard />
             <h2>Welcome back {session?.user.firstName}</h2>
-
-            <h2> client</h2>
-            <User/>
-            <h2>Server</h2>
-            {JSON.stringify(session)}
           </div>
         </div>
       </>
