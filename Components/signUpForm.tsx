@@ -59,10 +59,10 @@ console.log("form", data);
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="flex items-center justify-center">
       <div className="p-8 rounded-lg w-full max-w-3xl">
         <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">
-          Create an Account
+          Create Account
         </h2>
 
         <form
@@ -81,7 +81,7 @@ console.log("form", data);
                   : "border-gray-300 focus:ring-purple-500"
               }`}
             />
-            <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
+            <label className="absolute left-3 top-0 bg-secondary px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
               First Name *
             </label>
             {errors.firstName && (
@@ -103,7 +103,7 @@ console.log("form", data);
                   : "border-gray-300 focus:ring-purple-500"
               }`}
             />
-            <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
+            <label className="absolute left-3 top-0 bg-secondary px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
               Last Name *
             </label>
             {errors.lastName && (
@@ -124,7 +124,7 @@ console.log("form", data);
                   : "border-gray-300 focus:ring-purple-500"
               }`}
             />
-            <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
+            <label className="absolute left-3 top-0 bg-secondary px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
               Baptismal Name *
             </label>
             {errors.baptismalName && (
@@ -147,7 +147,7 @@ console.log("form", data);
                   : "border-gray-300 focus:ring-purple-500"
               }`}
             />
-            <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
+            <label className="absolute left-3 top-0 bg-secondary px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
               Email *
             </label>
             {errors.email && (
@@ -169,7 +169,7 @@ console.log("form", data);
                   : "border-gray-300 focus:ring-purple-500"
               }`}
             />
-            <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
+            <label className="absolute left-3 top-0 bg-secondary px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
               Phone Number *
             </label>
             {errors.phoneNumber && (
@@ -190,7 +190,7 @@ console.log("form", data);
                   : "border-gray-300 focus:ring-purple-500"
               }`}
             />
-            <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
+            <label className="absolute left-3 top-0 bg-secondary px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
               Password *
             </label>
             <button
@@ -218,7 +218,7 @@ console.log("form", data);
                   : "border-gray-300 focus:ring-purple-500"
               }`}
             />
-            <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
+            <label className="absolute left-3 top-0 bg-secondary px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
               Confirm Password *
             </label>
             <button
@@ -239,7 +239,7 @@ console.log("form", data);
           <div className="relative w-full">
             <button
               type="submit"
-              className="w-full bg-[#7300ff] text-white py-3 mx-5 rounded-md shadow-md hover:scale-105 transition-transform mt-6 flex items-center justify-center gap-2"
+              className="w-full bg-[#7300ff] text-secondary py-3 mx-5 rounded-md shadow-md hover:scale-105 transition-transform mt-6 flex items-center justify-center gap-2"
               disabled={isLoading}
             >
               {isLoading ? (
