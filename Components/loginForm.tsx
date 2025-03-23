@@ -49,7 +49,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="flex items-center justify-center">
       <div className="p-8 rounded-lg w-full max-w-3xl">
         <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">
           Login to Your Account
@@ -103,7 +103,7 @@ export default function LoginForm() {
 
           <button
             type="submit"
-            className="w-full bg-[#7300ff] text-white py-3 mx-5 rounded-md shadow-md hover:scale-105 transition-transform mt-6"
+            className="w-full bg-[#7300ff] text-white py-3 rounded-xl shadow-md hover:scale-105 transition-transform mt-6"
           >
             Login
           </button>
