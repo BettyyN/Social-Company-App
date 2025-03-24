@@ -6,41 +6,43 @@
 @layer base {
   :root {
     /* Light mode colors */
-    --color-bg: 255 255 255;         /* White */
-    --color-text: 17 24 39;          /* Gray-900 */
-    --color-primary: 110 44 204;     /* Your primary color (#6e2ccc) */
-    --color-secondary: 244 240 255;  /* Your secondary color (#f4f0ff) */
+    --color-bg: #F4F9FF;          /* White */
+    --color-text: #1c1c1c;        /* Gray-900 */
+    --color-primary: #6e2ccc;     /* Your primary color */
+    --color-secondary: #f4f0ff;   /* Your secondary color */   /* Custom text color */
   }
 
+  /*  #FAF8FF #F4F9FF #02010a #1c1c1c */
+
+  /* Dark mode colors */
   .dark {
-    /* Dark mode colors */
-    --color-bg: 10 10 10;            /* Dark background (#0a0a0a) */
-    --color-text: 237 237 237;       /* Light text (#ededed) */
-    --color-primary: 129 140 248;    /* Adjusted indigo for dark mode */
-    --color-secondary: 31 41 55;     /* Gray-800 */
+    --color-bg: #0a0a0a;         /* Dark background */
+    --color-text: #ededed;       /* Light text */
+    --color-primary: #8e3aed;    /* Adjusted indigo for dark mode */
+    --color-secondary: #e1d6fe;  /* Gray-800 */
   }
 }
 
 /* Custom Utility Classes */
 @layer utilities {
   .bg-primary {
-    background-color: rgb(var(--color-primary));
+    background-color: var(--color-primary);
   }
   
   .text-primary {
-    color: rgb(var(--color-primary));
+    color: var(--color-primary);
   }
 
   .bg-surface {
-    background-color: rgb(var(--color-bg));
+    background-color: var(--color-bg);
   }
 
   .text-surface {
-    color: rgb(var(--color-text));
+    color: var(--color-text);
   }
 
   .bg-secondary {
-    background-color: rgb(var(--color-secondary));
+    background-color: var(--color-secondary);
   }
 }
 
