@@ -9,6 +9,7 @@ import { useSignupMutation } from "../redux/api/authApi";
 import { useRouter } from "next/navigation";
 import { Loader } from "lucide-react";
 import { toast } from "sonner"; 
+import Link from "next/link";
 
 export default function SignupForm() {
   const {
@@ -248,6 +249,15 @@ console.log("form", data);
             )}
           </button>
         </form>
+           <h3 className="text-sm font-semibold text-center text-gray-700 mt-6">
+                 Already have an account? {""}
+                  <Link
+                    href="/auth/login"
+                    className="hover:underline text-[#7300ff]"
+                  >
+                    Login
+                  </Link>
+                </h3>
       </div>
     </div>
   );
