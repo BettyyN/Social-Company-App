@@ -8,10 +8,6 @@ import { useState } from "react";
 import Profile from "./Profile";
 
 export default function HomeHeader() {
- const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const toggleProfile = () => {
-    setIsProfileOpen((prev) => !prev);
-  };
   return (
     <>
       <header className="shadow-sm bg-[#F4F0FF] text-primary opacity-80 sticky top-0 z-50">
@@ -24,12 +20,13 @@ export default function HomeHeader() {
             <div className="pt-2">
               <Bell size={28} />
             </div>
-            <div className="w-12 rounded-full" onClick={toggleProfile}>
-              <img
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                className="rounded-full"
-              />
-              {isProfileOpen && <Profile/>}
+            <div className="w-12 rounded-full">
+              <Link href={"/profile"}>
+                <img
+                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  className="rounded-full"
+                />
+              </Link>
             </div>
             <div>
               <button
