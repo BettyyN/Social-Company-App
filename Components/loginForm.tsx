@@ -108,7 +108,7 @@ export default function LoginForm() {
             Login
           </button>
         </form>
-        <h1 className="text-sm font-semibold text-center text-gray-700 mt-6">
+        <h3 className="text-sm font-semibold text-center text-gray-700 mt-6">
           Didn't have an account?{" "}
           <Link
             href="/auth/signup"
@@ -116,7 +116,7 @@ export default function LoginForm() {
           >
             Sign Up
           </Link>
-        </h1>
+        </h3>
       </div>
     </div>
   );
