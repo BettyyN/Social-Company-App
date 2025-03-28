@@ -9,7 +9,7 @@ export default function drawer() {
   return (
     <>
       <div
-        className={`h-screen bg-primary text-black ${
+        className={`h-screen bg-[#645CBB] ${
           isOpen ? "w-64" : "w-20"
         } transition-all duration-300 flex flex-col relative`}
       >
@@ -20,29 +20,12 @@ export default function drawer() {
         >
           {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
         </button>
-
         {/* Navigation */}
-        <div className="flex flex-col flex-grow mt-6 space-y-2 text-sm">
+        <div className="flex flex-col flex-grow mt-20 space-y-2 text-sm">
           <ul className="flex flex-col w-full pl-5">
-            <li className="flex w-full p-3 hover:bg-secondary rounded transition-colors cursor-pointer h-10 bg-secondary">
-              <FiMessageSquare size={24} className="text-white" />
-              <h1 className="text-white">General</h1>
-            </li>
-            <li className="flex w-full p-3 hover:bg-secondary rounded-xl transition-colors cursor-pointer h-15 bg-white">
-              <FiMessageSquare size={24} />
-              <h1>Messages</h1>
-            </li>
-            <li className="flex w-full p-3 hover:bg-secondary rounded-xl transition-colors cursor-pointer h-15 bg-white">
-              <FiMessageSquare size={24} />
-              <h1>Events</h1>
-            </li>
-            <li className="flex w-full p-3 hover:bg-secondary rounded-xl transition-colors cursor-pointer h-15 bg-white">
-              <FiMessageSquare size={24} />
-              <h1>Teams</h1>
-            </li>
-            <li className="flex w-full p-3 hover:bg-secondary rounded-xl transition-colors cursor-pointer h-15 bg-white">
-              <FiMessageSquare size={24} />
-              <h1>Settings</h1>
+            <li className="flex w-full p-7 hover:bg-secondary rounded-4xl rounded-r-none transition-colors cursor-pointer h-10 bg-[#c0deff] gap-2 items-center">
+              <FiMessageSquare size={24} className="text-white pt-1" />
+              <h1 className="text-white ">General</h1>
             </li>
           </ul>
         </div>
