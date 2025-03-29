@@ -2,8 +2,8 @@
 
 export default function postCard() {
   return (
-    <div>  
-      <div className="bg-base-100 shadow-sm p-3">
+    <div className=" m-5">  
+      <div className="bg-base-100 shadow-sm">
         <figure>
           <img
             src="nature.jpg"
