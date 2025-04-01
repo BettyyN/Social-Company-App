@@ -8,8 +8,8 @@
     /* Light mode colors */
     --color-bg: #F4F9FF;          /* White */
     --color-text: #1c1c1c;        /* Gray-900 */
-    --color-primary: #6e2ccc;     /* Your primary color */
-    --color-secondary: #f4f0ff;   /* Your secondary color */   /* Custom text color */
+    --color-primary: #885df1;     /* Your primary color */
+    --color-secondary: #272044;   /* Your secondary color */   /* Custom text color */
   }
 
   /*  #FAF8FF #F4F9FF #02010a #1c1c1c */
@@ -22,6 +22,10 @@
     --color-secondary: #e1d6fe;  /* Gray-800 */
   }
 }
+
+/* 
+   --color-primary: #8e3aed;   
+    --color-secondary: #e1d6fe;  */
 
 /* Custom Utility Classes */
 @layer utilities {
