@@ -17,14 +17,17 @@ export default async function page() {
     const userName=(session?.user.firstName+" ").toString();
     return (
       <>
-        <div className="flex flex-row h-screen bg-[#eff7ff]">
+        <div className="flex flex-row h-screen bg-[#FDFDFD] overflow-hidden">
           <div className="flex">
             <Drawer />
           </div>
-          <div className="flex-1 overflow-y-auto transition-margin duration-300">
-            <HomeHeader userName={userName} />
-            {/* <h2 className=" m-5 justify-center">Welcome back {session?.user.firstName}</h2> */}
-            <PostCard />
+          <div className="flex-1 overflow-y-auto transition-margin duration-300 ">
+            <div className="md:mx-5">
+              <HomeHeader userName={userName} />
+            </div>
+            <div className="md:mx-15">
+              <PostCard />
+            </div>
           </div>
         </div>
       </>
