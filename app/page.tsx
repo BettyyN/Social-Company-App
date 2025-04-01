@@ -1,13 +1,13 @@
 import Image from "next/image";
-import heroBackground from "../public/heroimg.jpg";
+import heroBackground from "../public/heroimg.png";
 import Header from "../Components/header";
 import Link from "next/link";
 import { Provider } from "react-redux";
 
 export default function Home() {
   return (
-    <main className="bg-[#380F71]">
-      <div className=" min-h-screen relative">
+    <main className="bg-[#772912]">
+      <div className=" max-h-screen relative">
         {/* Apply blur and transparency to the image */}
         <div className="absolute inset-0 z-0">
           <Image
