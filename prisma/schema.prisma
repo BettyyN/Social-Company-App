@@ -14,210 +14,209 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model User {
-  id            Int          @id @default(autoincrement())
-  firstName     String
+model User{
+  userId    Int @id @default(autoincrement())
+  firstName String
+  lastName String
+  phoneNumber String @unique
   baptismalName String?
-  lastName      String
-  email         String?       @unique
-  password      String
-  phoneNumber   String     @unique
   profilePicture String?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  password String
+  createdAt DateTime @default(now())
+  deletedAt DateTime?
+  role  String
+  Post Post[]
+}
+
+model Post{
+  postId  Int @id @default(autoincrement())
+  title String
+  description String
+  picture String?
+  author  User @relation(fields: [authorId], references: [userId])
+  authorId Int
+}
+
+model Like{
+  likeId Int @id @default(autoincrement())
+  post Post @relation(fields:[posttId], references:[postId])
+  posttId Int
   
-  // Relationships
-  role          Role         @relation(fields: [roleId], references: [id])
-  roleId        Int
-  batch         Batch?       @relation(fields: [batchId], references: [id])
-  batchId       Int?
-  team          Team?        @relation(fields: [teamId], references: [id])
-  teamId        Int?
-  posts         Post[]
-  comments      Comment[]
-  likes         Like[]
-  tags          UserTag[]
-  advertisements Advertisement[]
-  notifications Notification[]
-  chats         ChatMember[]
-  sentMessages  Message[]    @relation("SentMessages")
-  receivedMessages Message[] @relation("ReceivedMessages")
-
-  @@index([email, baptismalName])
 }
 
-model Role {
-  id    Int      @id @default(autoincrement())
-  role  RoleType @unique @default(STUDENT)
-  users User[]
-}
 
-model Batch {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  startDate DateTime
-  endDate   DateTime
-  teams     Team[]
-  students  User[]
-  events    Event[]
-}
+// model Role {
+//   id    Int      @id @default(autoincrement())
+//   role  RoleType @unique @default(STUDENT)
+//   users User[]
+// }
 
-model Team {
-  id        Int      @id @default(autoincrement())
-  name      String
-  stage     Stage    @default(BEGINNER)
-  batch     Batch    @relation(fields: [batchId], references: [id])
-  batchId   Int
-  members   User[]
-  posts     Post[]
-  chats     Chat[]
-}
+// model Batch {
+//   id        Int      @id @default(autoincrement())
+//   name      String   @unique
+//   startDate DateTime
+//   endDate   DateTime
+//   teams     Team[]
+//   students  User[]
+//   events    Event[]
+// }
 
-model Event {
-  id          Int       @id @default(autoincrement())
-  title       String
-  description String
-  type        EventType
-  date        DateTime
-  batch       Batch?    @relation(fields: [batchId], references: [id])
-  batchId     Int?
-  posts       Post[]
-}
+// model Team {
+//   id        Int      @id @default(autoincrement())
+//   name      String
+//   stage     Stage    @default(BEGINNER)
+//   batch     Batch    @relation(fields: [batchId], references: [id])
+//   batchId   Int
+//   members   User[]
+//   posts     Post[]
+//   chats     Chat[]
+// }
 
-model Advertisement {
-  id          Int       @id @default(autoincrement())
-  title       String
-  description String
-  status      ModStatus @default(PENDING)
-  author      User      @relation(fields: [authorId], references: [id])
-  authorId    Int
-  createdAt   DateTime  @default(now())
-}
+// model Event {
+//   id          Int       @id @default(autoincrement())
+//   title       String
+//   description String
+//   type        EventType
+//   date        DateTime
+//   batch       Batch?    @relation(fields: [batchId], references: [id])
+//   batchId     Int?
+//   posts       Post[]
+// }
 
-model Post {
-  id          Int       @id @default(autoincrement())
-  title       String
-  content     String?
-  images      PostImage[]
-  type        PostType  @default(GENERAL)
-  author      User      @relation(fields: [authorId], references: [id])
-  authorId    Int
-  team        Team?     @relation(fields: [teamId], references: [id])
-  teamId      Int?
-  event       Event?    @relation(fields: [eventId], references: [id])
-  eventId     Int?
-  tags        UserTag[]
-  comments    Comment[]
-  likes       Like[]
-  createdAt   DateTime  @default(now())
+// model Advertisement {
+//   id          Int       @id @default(autoincrement())
+//   title       String
+//   description String
+//   status      ModStatus @default(PENDING)
+//   author      User      @relation(fields: [authorId], references: [id])
+//   authorId    Int
+//   createdAt   DateTime  @default(now())
+// }
 
-}
+// model Post {
+//   id          Int       @id @default(autoincrement())
+//   title       String
+//   content     String?
+//   images      PostImage[]
+//   type        PostType  @default(GENERAL)
+//   author      User      @relation(fields: [authorId], references: [id])
+//   authorId    Int
+//   team        Team?     @relation(fields: [teamId], references: [id])
+//   teamId      Int?
+//   event       Event?    @relation(fields: [eventId], references: [id])
+//   eventId     Int?
+//   tags        UserTag[]
+//   comments    Comment[]
+//   likes       Like[]
+//   createdAt   DateTime  @default(now())
 
-model PostImage {
-  id   Int    @id @default(autoincrement())
-  url String
-  post Post  @relation(fields: [postId], references: [id])
-  postId Int
-}
+// }
 
-model UserTag {
-  id     Int  @id @default(autoincrement())
-  post   Post @relation(fields: [postId], references: [id])
-  postId Int
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
-}
+// model PostImage {
+//   id   Int    @id @default(autoincrement())
+//   url String
+//   post Post  @relation(fields: [postId], references: [id])
+//   postId Int
+// }
 
-model Comment {
-  id        Int      @id @default(autoincrement())
-  content   String
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    Int
-  createdAt DateTime @default(now())
-}
+// model UserTag {
+//   id     Int  @id @default(autoincrement())
+//   post   Post @relation(fields: [postId], references: [id])
+//   postId Int
+//   user   User @relation(fields: [userId], references: [id])
+//   userId Int
+// }
 
-model Like {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    Int
-  createdAt DateTime @default(now())
-}
+// model Comment {
+//   id        Int      @id @default(autoincrement())
+//   content   String
+//   author    User     @relation(fields: [authorId], references: [id])
+//   authorId  Int
+//   post      Post     @relation(fields: [postId], references: [id])
+//   postId    Int
+//   createdAt DateTime @default(now())
+// }
 
-model Notification {
-  id        Int      @id @default(autoincrement())
-  message   String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
-  createdAt DateTime @default(now())
-  read      Boolean  @default(false)
-}
+// model Like {
+//   id        Int      @id @default(autoincrement())
+//   user      User     @relation(fields: [userId], references: [id])
+//   userId    Int
+//   post      Post     @relation(fields: [postId], references: [id])
+//   postId    Int
+//   createdAt DateTime @default(now())
+// }
 
-model Chat {
-  id        Int           @id @default(autoincrement())
-  name      String?
-  type      ChatType      @default(TEAM)
-  team      Team?         @relation(fields: [teamId], references: [id])
-  teamId    Int?
-  members   ChatMember[]
-  messages  Message[]
-}
+// model Notification {
+//   id        Int      @id @default(autoincrement())
+//   message   String
+//   user      User     @relation(fields: [userId], references: [id])
+//   userId    Int
+//   createdAt DateTime @default(now())
+//   read      Boolean  @default(false)
+// }
 
-model ChatMember {
-  id     Int  @id @default(autoincrement())
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
-  chat   Chat @relation(fields: [chatId], references: [id])
-  chatId Int
-}
+// model Chat {
+//   id        Int           @id @default(autoincrement())
+//   name      String?
+//   type      ChatType      @default(TEAM)
+//   team      Team?         @relation(fields: [teamId], references: [id])
+//   teamId    Int?
+//   members   ChatMember[]
+//   messages  Message[]
+// }
 
-model Message {
-  id        Int      @id @default(autoincrement())
-  content   String
-  sender    User     @relation(fields: [senderId], references: [id], name: "SentMessages")
-  senderId  Int
-  receiver  User?    @relation(fields: [receiverId], references: [id], name: "ReceivedMessages")
-  receiverId Int?
-  chat      Chat     @relation(fields: [chatId], references: [id])
-  chatId    Int
-  createdAt DateTime @default(now())
-}
+// model ChatMember {
+//   id     Int  @id @default(autoincrement())
+//   user   User @relation(fields: [userId], references: [id])
+//   userId Int
+//   chat   Chat @relation(fields: [chatId], references: [id])
+//   chatId Int
+// }
 
-// Enums
-enum RoleType {
-  STUDENT
-  TEACHER
-  ADMIN
-  OTHER
-}
+// model Message {
+//   id        Int      @id @default(autoincrement())
+//   content   String
+//   sender    User     @relation(fields: [senderId], references: [id], name: "SentMessages")
+//   senderId  Int
+//   receiver  User?    @relation(fields: [receiverId], references: [id], name: "ReceivedMessages")
+//   receiverId Int?
+//   chat      Chat     @relation(fields: [chatId], references: [id])
+//   chatId    Int
+//   createdAt DateTime @default(now())
+// }
 
-enum Stage {
-  BEGINNER
-  INTERMEDIATE
-  ADVANCED
-}
+// // Enums
+// enum RoleType {
+//   STUDENT
+//   TEACHER
+//   ADMIN
+//   OTHER
+// }
 
-enum EventType {
-  WEEKLY
-  MONTHLY
-}
+// enum Stage {
+//   BEGINNER
+//   INTERMEDIATE
+//   ADVANCED
+// }
 
-enum PostType {
-  GENERAL
-  TEAM
-  EVENT
-}
+// enum EventType {
+//   WEEKLY
+//   MONTHLY
+// }
 
-enum ChatType {
-  TEAM
-  PRIVATE
-}
+// enum PostType {
+//   GENERAL
+//   TEAM
+//   EVENT
+// }
 
-enum ModStatus {
-  PENDING
-  APPROVED
-  REJECTED
-}
+// enum ChatType {
+//   TEAM
+//   PRIVATE
+// }
+
+// enum ModStatus {
+//   PENDING
+//   APPROVED
+//   REJECTED
+// }
