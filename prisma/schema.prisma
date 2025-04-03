@@ -24,8 +24,13 @@ model User{
   password String
   createdAt DateTime @default(now())
   deletedAt DateTime?
-  role  String
   Post Post[]
+  like Like[]
+  comment Comment[]
+  memberships   GroupMember[]
+  role Role @relation(fields:[roleId],references:[roleId])
+  roleId Int
+  message Messages[]
 }
 
 model Post{
@@ -35,14 +40,87 @@ model Post{
   picture String?
   author  User @relation(fields: [authorId], references: [userId])
   authorId Int
+  likes Like[]
+  comments Comment[]
 }
 
 model Like{
   likeId Int @id @default(autoincrement())
-  post Post @relation(fields:[posttId], references:[postId])
-  posttId Int
-  
+  post Post @relation(fields:[postId], references:[postId])
+  postId Int
+  user User@relation(fields:[userId], references: [userId])
+  userId Int
+  createdAt DateTime @default(now())
+  deletedAt DateTime? 
 }
+
+model Comment{
+  commentId Int @id @default(autoincrement())
+  post Post @relation(fields:[postId], references:[postId])
+  postId Int
+  user User@relation(fields:[userId], references: [userId])
+  userId Int
+  createdAt DateTime @default(now())
+  deletedAt DateTime? 
+}
+
+model Groups{
+  groupId Int @id @default(autoincrement())
+  groupName String
+  groupDescription String
+  profilePicture String?
+  createdAt DateTime @default(now())
+  deletedAt DateTime?
+  members GroupMember[]
+  sentMessages     Messages[] @relation("MessageSender")
+  receivedMessages Messages[] @relation("MessageReceiver")
+  groupMessages    GroupMessages[]
+}
+
+model GroupMember{
+  id Int @id @default(autoincrement())
+  user User@relation(fields:[userId],references:[userId])
+  userId Int
+  group Groups@relation(fields:[groupId],references:[groupId])
+  groupId Int
+  
+  joinedAt DateTime @default(now())
+  @@unique([userId, groupId])
+}
+
+model Role{
+  roleId Int @id @default(autoincrement())
+  roleName String
+  description String
+  createdAt DateTime @default(now())
+  deletedAt DateTime?
+  user User[]
+  permission Permission[]
+}
+
+model Permission{
+  permissionId Int @id @default(autoincrement())
+  permissionName String
+  desctipion String
+  createdAt DateTime @default(now())
+  deleedAt DateTime?
+  role Role @relation (fields:[roleId], references:[roleId])
+  roleId Int
+  @@unique([permissionId, roleId])
+}
+model Messages{
+  messageId Int @id @default(autoincrement())
+  sender User @relation(fields:[senderId], references:[userId])
+  senderId Int
+  reciever User? @relation(fields:[recieverId], references:[userId])
+  recieverId Int?
+  group Groups? @relation(fields:[groupId], references:[groupId])
+  groupId Int?
+  message String
+  createdAt DateTime @default(now())
+  deletedAt DateTime?
+}
+
 
 
 // model Role {
