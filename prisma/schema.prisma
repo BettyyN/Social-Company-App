@@ -14,287 +14,134 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model User{
-  userId    Int @id @default(autoincrement())
-  firstName String
-  lastName String
-  phoneNumber String @unique
-  baptismalName String?
-  profilePicture String?
-  password String
-  createdAt DateTime @default(now())
-  deletedAt DateTime?
-  Post Post[]
-  like Like[]
-  comment Comment[]
-  memberships   GroupMember[]
-  role Role @relation(fields:[roleId],references:[roleId])
-  roleId Int
-  message Messages[]
+model User {
+  userId                 Int             @id @default(autoincrement())
+  firstName              String
+  lastName               String
+  phoneNumber            String          @unique
+  baptismalName          String?
+  profilePicture         String?
+  password               String
+  createdAt              DateTime        @default(now())
+  deletedAt              DateTime?
+  Post                   Post[]
+  like                   Like[]
+  comment                Comment[]
+  memberships            GroupMember[]
+  role                   Role            @relation(fields: [roleId], references: [roleId])
+  roleId                 Int
+  sentDirectMessages     DirectMessage[] @relation("MessageSender")
+  receivedDirectMessages DirectMessage[] @relation("MessageReceiver")
+  groupMessages          GroupMessage[]  @relation("GroupMessageSender")
 }
 
-model Post{
-  postId  Int @id @default(autoincrement())
-  title String
+model Post {
+  postId      Int       @id @default(autoincrement())
+  title       String
   description String
-  picture String?
-  author  User @relation(fields: [authorId], references: [userId])
-  authorId Int
-  likes Like[]
-  comments Comment[]
+  picture     String?
+  author      User      @relation(fields: [authorId], references: [userId])
+  authorId    Int
+  createdAt  DateTime @default(now())
+  likes       Like[]
+  comments    Comment[]
+  group       Group?    @relation(fields: [groupId], references: [groupId])
+  groupId     Int?
+   @@index([authorId]) 
+  @@index([createdAt]) 
 }
 
-model Like{
-  likeId Int @id @default(autoincrement())
-  post Post @relation(fields:[postId], references:[postId])
-  postId Int
-  user User@relation(fields:[userId], references: [userId])
-  userId Int
-  createdAt DateTime @default(now())
-  deletedAt DateTime? 
-}
-
-model Comment{
-  commentId Int @id @default(autoincrement())
-  post Post @relation(fields:[postId], references:[postId])
-  postId Int
-  user User@relation(fields:[userId], references: [userId])
-  userId Int
-  createdAt DateTime @default(now())
-  deletedAt DateTime? 
-}
-
-model Groups{
-  groupId Int @id @default(autoincrement())
-  groupName String
-  groupDescription String
-  profilePicture String?
-  createdAt DateTime @default(now())
+model Like {
+  likeId    Int       @id @default(autoincrement())
+  post      Post      @relation(fields: [postId], references: [postId])
+  postId    Int
+  user      User      @relation(fields: [userId], references: [userId])
+  userId    Int
+  createdAt DateTime  @default(now())
   deletedAt DateTime?
-  members GroupMember[]
-  sentMessages     Messages[] @relation("MessageSender")
-  receivedMessages Messages[] @relation("MessageReceiver")
-  groupMessages    GroupMessages[]
+
+  @@unique([postId, userId])
 }
 
-model GroupMember{
-  id Int @id @default(autoincrement())
-  user User@relation(fields:[userId],references:[userId])
-  userId Int
-  group Groups@relation(fields:[groupId],references:[groupId])
-  groupId Int
-  
+model Comment {
+  commentId Int       @id @default(autoincrement())
+  post      Post      @relation(fields: [postId], references: [postId])
+  postId    Int
+  user      User      @relation(fields: [userId], references: [userId])
+  userId    Int
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+  message String
+  @@index([postId])
+
+}
+
+model Group {
+  groupId          Int            @id @default(autoincrement())
+  groupName        String
+  groupDescription String
+  profilePicture   String?
+  createdAt        DateTime       @default(now())
+  deletedAt        DateTime?
+  members          GroupMember[]
+  message          GroupMessage[]
+  post             Post[]
+}
+
+model GroupMember {
+  GroupMemberId Int   @id @default(autoincrement())
+  user          User  @relation(fields: [userId], references: [userId])
+  userId        Int
+  group         Group @relation(fields: [groupId], references: [groupId])
+  groupId       Int
+
   joinedAt DateTime @default(now())
+
   @@unique([userId, groupId])
 }
 
-model Role{
-  roleId Int @id @default(autoincrement())
-  roleName String
+model Role {
+  roleId      Int          @id @default(autoincrement())
+  roleName    String
   description String
-  createdAt DateTime @default(now())
-  deletedAt DateTime?
-  user User[]
-  permission Permission[]
+  createdAt   DateTime     @default(now())
+  deletedAt   DateTime?
+  user        User[]
+  permission  Permission[]
 }
 
-model Permission{
-  permissionId Int @id @default(autoincrement())
+model Permission {
+  permissionId   Int       @id @default(autoincrement())
   permissionName String
-  desctipion String
-  createdAt DateTime @default(now())
-  deleedAt DateTime?
-  role Role @relation (fields:[roleId], references:[roleId])
-  roleId Int
+  description    String
+  createdAt      DateTime  @default(now())
+  deletedAt      DateTime?
+  role           Role      @relation(fields: [roleId], references: [roleId])
+  roleId         Int
+
   @@unique([permissionId, roleId])
 }
-model Messages{
-  messageId Int @id @default(autoincrement())
-  sender User @relation(fields:[senderId], references:[userId])
-  senderId Int
-  reciever User? @relation(fields:[recieverId], references:[userId])
-  recieverId Int?
-  group Groups? @relation(fields:[groupId], references:[groupId])
-  groupId Int?
-  message String
-  createdAt DateTime @default(now())
-  deletedAt DateTime?
+
+model DirectMessage {
+  messageId  Int       @id @default(autoincrement())
+  sender     User      @relation("MessageSender", fields: [senderId], references: [userId])
+  senderId   Int
+  receiver   User      @relation("MessageReceiver", fields: [receiverId], references: [userId])
+  receiverId Int
+  message    String
+  createdAt  DateTime  @default(now())
+  deletedAt  DateTime?
+
+  @@unique([senderId, receiverId])
 }
 
-
-
-// model Role {
-//   id    Int      @id @default(autoincrement())
-//   role  RoleType @unique @default(STUDENT)
-//   users User[]
-// }
-
-// model Batch {
-//   id        Int      @id @default(autoincrement())
-//   name      String   @unique
-//   startDate DateTime
-//   endDate   DateTime
-//   teams     Team[]
-//   students  User[]
-//   events    Event[]
-// }
-
-// model Team {
-//   id        Int      @id @default(autoincrement())
-//   name      String
-//   stage     Stage    @default(BEGINNER)
-//   batch     Batch    @relation(fields: [batchId], references: [id])
-//   batchId   Int
-//   members   User[]
-//   posts     Post[]
-//   chats     Chat[]
-// }
-
-// model Event {
-//   id          Int       @id @default(autoincrement())
-//   title       String
-//   description String
-//   type        EventType
-//   date        DateTime
-//   batch       Batch?    @relation(fields: [batchId], references: [id])
-//   batchId     Int?
-//   posts       Post[]
-// }
-
-// model Advertisement {
-//   id          Int       @id @default(autoincrement())
-//   title       String
-//   description String
-//   status      ModStatus @default(PENDING)
-//   author      User      @relation(fields: [authorId], references: [id])
-//   authorId    Int
-//   createdAt   DateTime  @default(now())
-// }
-
-// model Post {
-//   id          Int       @id @default(autoincrement())
-//   title       String
-//   content     String?
-//   images      PostImage[]
-//   type        PostType  @default(GENERAL)
-//   author      User      @relation(fields: [authorId], references: [id])
-//   authorId    Int
-//   team        Team?     @relation(fields: [teamId], references: [id])
-//   teamId      Int?
-//   event       Event?    @relation(fields: [eventId], references: [id])
-//   eventId     Int?
-//   tags        UserTag[]
-//   comments    Comment[]
-//   likes       Like[]
-//   createdAt   DateTime  @default(now())
-
-// }
-
-// model PostImage {
-//   id   Int    @id @default(autoincrement())
-//   url String
-//   post Post  @relation(fields: [postId], references: [id])
-//   postId Int
-// }
-
-// model UserTag {
-//   id     Int  @id @default(autoincrement())
-//   post   Post @relation(fields: [postId], references: [id])
-//   postId Int
-//   user   User @relation(fields: [userId], references: [id])
-//   userId Int
-// }
-
-// model Comment {
-//   id        Int      @id @default(autoincrement())
-//   content   String
-//   author    User     @relation(fields: [authorId], references: [id])
-//   authorId  Int
-//   post      Post     @relation(fields: [postId], references: [id])
-//   postId    Int
-//   createdAt DateTime @default(now())
-// }
-
-// model Like {
-//   id        Int      @id @default(autoincrement())
-//   user      User     @relation(fields: [userId], references: [id])
-//   userId    Int
-//   post      Post     @relation(fields: [postId], references: [id])
-//   postId    Int
-//   createdAt DateTime @default(now())
-// }
-
-// model Notification {
-//   id        Int      @id @default(autoincrement())
-//   message   String
-//   user      User     @relation(fields: [userId], references: [id])
-//   userId    Int
-//   createdAt DateTime @default(now())
-//   read      Boolean  @default(false)
-// }
-
-// model Chat {
-//   id        Int           @id @default(autoincrement())
-//   name      String?
-//   type      ChatType      @default(TEAM)
-//   team      Team?         @relation(fields: [teamId], references: [id])
-//   teamId    Int?
-//   members   ChatMember[]
-//   messages  Message[]
-// }
-
-// model ChatMember {
-//   id     Int  @id @default(autoincrement())
-//   user   User @relation(fields: [userId], references: [id])
-//   userId Int
-//   chat   Chat @relation(fields: [chatId], references: [id])
-//   chatId Int
-// }
-
-// model Message {
-//   id        Int      @id @default(autoincrement())
-//   content   String
-//   sender    User     @relation(fields: [senderId], references: [id], name: "SentMessages")
-//   senderId  Int
-//   receiver  User?    @relation(fields: [receiverId], references: [id], name: "ReceivedMessages")
-//   receiverId Int?
-//   chat      Chat     @relation(fields: [chatId], references: [id])
-//   chatId    Int
-//   createdAt DateTime @default(now())
-// }
-
-// // Enums
-// enum RoleType {
-//   STUDENT
-//   TEACHER
-//   ADMIN
-//   OTHER
-// }
-
-// enum Stage {
-//   BEGINNER
-//   INTERMEDIATE
-//   ADVANCED
-// }
-
-// enum EventType {
-//   WEEKLY
-//   MONTHLY
-// }
-
-// enum PostType {
-//   GENERAL
-//   TEAM
-//   EVENT
-// }
-
-// enum ChatType {
-//   TEAM
-//   PRIVATE
-// }
-
-// enum ModStatus {
-//   PENDING
-//   APPROVED
-//   REJECTED
-// }
+model GroupMessage {
+  messageId Int       @id @default(autoincrement())
+  sender    User      @relation("GroupMessageSender", fields: [senderId], references: [userId])
+  senderId  Int
+  group     Group     @relation(fields: [groupId], references: [groupId])
+  groupId   Int
+  message   String
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+}
