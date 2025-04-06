@@ -43,7 +43,7 @@ export const authOptions: NextAuthOptions = {
         console.log("User Data from DB:", existingUser);
 
         return {
-          id:`${ existingUser.id}`,
+          id:`${ existingUser.userId}`,
           firstName: existingUser.firstName,
           lastName: existingUser.lastName,
           phoneNumber: existingUser.phoneNumber || '',
