@@ -10,15 +10,15 @@ export default function Header() {
 
   return (
     <>
-      <header className="shadow-sm bg-primary text-primary opacity-80">
+      <header className="shadow-sm bg-white text-primary ">
         <nav className="container mx-auto flex items-center justify-between p-2">
           {/* Logo */}
-          <Link href="/" className="text-2xl font-semibold text-white">
+          <Link href="/" className="text-2xl font-semibold text-primary">
             MyApp
           </Link>
 
           {/* Desktop Menu */}
-          <ul className="hidden space-x-6 lg:flex text-white">
+          <ul className="hidden space-x-6 lg:flex text-primary">
             <li>
               <Link href="/" className="hover:text-white">
                 Home
