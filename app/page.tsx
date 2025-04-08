@@ -1,50 +1,50 @@
 import Image from "next/image";
-import heroBackground from "../public/heroimg.png";
+import heroBackground from "../public/nn.jpg";
 import Header from "../Components/header";
 import Link from "next/link";
-import { Provider } from "react-redux";
 
 export default function Home() {
   return (
-    <main className="bg-[#772912]">
-      <div className=" max-h-screen relative">
-        {/* Apply blur and transparency to the image */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src={heroBackground}
-            alt="Begenra Institute Background"
-            layout="fill"
-            className="object-cover opacity-80"
-            priority
-            quality={80}
-          />
-        </div>
+    <main className="h-screen w-full overflow-hidden relative">
+      {/* Background image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src={heroBackground}
+          alt="Begenra Institute Background"
+          fill
+          className="object-cover brightness-90"
+          priority
+          quality={80}
+        />
+      </div>
 
-        {/* Apply backdrop blur to the overlay */}
-        <div className="hero-overlay backdrop-blur-[2px]">
-          <Header />
-        </div>
+      {/* Overlay + Header */}
+      <div className="absolute inset-0 z-10 bg-black/10 backdrop-blur-[2px]">
+        <Header />
+      </div>
 
-        <div className=" text-neutral-content relative z-10  flex items-center justify-center text-center min-h-screen">
-          <div className=" max-w-md md:max-w-xl ">
-            <h1 className="mb-5 md:text-5xl text-2xl font-bold text-[#7300ff] text-">
-              Selam,
-            </h1>
-            <h2 className="mb-5 md:text-5xl font-bold">
-              Kidus Yared Yebegena Maseltegna
-            </h2>
-            <p className="mb-5 text-justify">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
-            </p>
+      {/* Hero content */}
+      <div className="relative z-20 h-full flex items-center justify-center text-neutral-content text-center px-4">
+        <div className="max-w-md md:max-w-xl">
+          <h1 className="mb-5 md:text-5xl text-2xl font-bold text-[#7300ff]">
+            Selam,
+          </h1>
+          <h2 className="mb-5 md:text-5xl font-bold">
+            Kidus Yared Yebegena Maseltegna
+          </h2>
+          <p className="mb-5 text-justify">
+            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
+            excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
+            a id nisi.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
             <Link href="/auth/signup">
-              <button className="bg-[#7300ff] text-white rounded-lg w-40 h-12 shadow-md transition-transform duration-300 hover:scale-105 sm:w-32 sm:h-10 md:w-36 md:h-11 lg:w-40 lg:h-12">
+              <button className="bg-[#7300ff] text-white rounded-lg w-40 h-12 shadow-md transition-transform duration-300 hover:scale-105">
                 Register
               </button>
             </Link>
             <Link href="/home">
-              <button className="bg-[#7300ff] text-white rounded-lg w-40 h-12 shadow-md transition-transform duration-300 hover:scale-105 sm:w-32 sm:h-10 md:w-36 md:h-11 lg:w-40 lg:h-12 ml-5">
+              <button className="bg-[#7300ff] text-white rounded-lg w-40 h-12 shadow-md transition-transform duration-300 hover:scale-105">
                 Home
               </button>
             </Link>
