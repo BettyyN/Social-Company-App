@@ -8,23 +8,27 @@ function profileCover() {
           <div className="w-full flex  items-end justify-end relative">
             <img
               src="https://t3.ftcdn.net/jpg/06/62/78/56/360_F_662785635_zHeHRHhBHoiUJJEc0CG2ceVqXP3UJu2r.jpg"
-              className=" w-full h-full rounded-md"
+              className=" w-full h-full rounded-md opacity-85"
             />
             <img
-              src="https://static.vecteezy.com/system/resources/thumbnails/026/829/465/small_2x/beautiful-girl-with-autumn-leaves-photo.jpg"
+              src="https://img.freepik.com/free-photo/cute-girl-with-blond-hair-smiling-camera_23-2148308783.jpg?w=360"
               alt="pro"
-              className=" w-20 h-20 rounded-full absolute -bottom-4 left-6"
+              className=" w-24 h-24 rounded-full absolute -bottom-4 left-13"
             />
-            <button className="absolute p-5">Edit Cover Photo</button>
+            <button className="absolute m-3 p-1 w-36 h-10 border-none text-primary bg-white hover:scale-103 shadow-sm shadow-primary rounded-md transition duration-200">
+              Edit Cover Photo
+            </button>
           </div>
 
-          <div className="bg-white w-full pl-24 text-primary flex justify-between">
+          <div className="bg-white w-full pl-36 text-primary flex justify-between">
             <span>
-              <h1 className="text-xl font-bold"> Full name</h1>
+              <h1 className="text-lg font-bold"> Full name</h1>
               <h2 className="text-md">Member</h2>
             </span>
             <span>
-              <button> Edit Profile</button>
+              <button className="p-1 w-32 h-8 border border-primary hover:bg-primary shadow-sm shadow-primary mr-5 mt-3 transition duration-200 hover:scale-103 rounded-lg">
+                Edit Profile
+              </button>
             </span>
           </div>
         </div>
