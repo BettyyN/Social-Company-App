@@ -102,7 +102,7 @@ model GroupMember {
 
 model Role {
   roleId      Int          @id @default(autoincrement())
-  roleName    String
+  roleName    String @unique
   description String
   createdAt   DateTime     @default(now())
   deletedAt   DateTime?
@@ -112,7 +112,7 @@ model Role {
 
 model Permission {
   permissionId   Int       @id @default(autoincrement())
-  permissionName String
+  permissionName String @unique
   description    String
   createdAt      DateTime  @default(now())
   deletedAt      DateTime?
