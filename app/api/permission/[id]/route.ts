@@ -30,7 +30,6 @@ export async function PUT(req:NextRequest,{params}:{params: {id:String}}) {
 
 export async function DELETE(req: NextRequest,{params}:{params:{id : String}}){
     try {
-      const body = await req.json();
       const permissionId = Number(params.id);
       if (isNaN(permissionId)) {
         return NextResponse.json(
@@ -54,7 +53,7 @@ export async function DELETE(req: NextRequest,{params}:{params:{id : String}}){
     } catch (error) {
       console.log(error, "Permission delete error");
       return NextResponse.json(
-        { error: "Internal sever error" },
+        { error: "Internal server error" },
         { status: 500 }
       );
     }
