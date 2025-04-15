@@ -78,7 +78,7 @@ model Comment {
 
 model Group {
   groupId          Int            @id @default(autoincrement())
-  groupName        String
+  groupName        String @unique
   groupDescription String
   profilePicture   String?
   createdAt        DateTime       @default(now())
