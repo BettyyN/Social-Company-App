@@ -1,22 +1,20 @@
 import { db } from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { hash } from "bcrypt";
-import { userSchema } from "@/schema/userSchema";
 import { z } from "zod";
+import { uploadImage } from "@/lib/uploadImage";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const formData = await req.formData();
+    const roleId =Number( formData.get("roleId")) ;
+    const phoneNumber = formData.get("phoneNumber") as string 
+    const firstName = formData.get("firstName") as string
+    const password= formData.get("password") as string
+     const lastName = formData.get("firstName") as string;
+      const baptismalName = formData.get("firstName") as string;
+      const profilePicture = formData.get("profilePicture") as File | null;
 
-    // Validate request body against schema
-    const {
-      firstName,
-      lastName,
-      phoneNumber,
-      password,
-      baptismalName,
-      roleId,
-    } = userSchema.parse(body);
 
     // Check if the specified role exists
     const roleExists = await db.role.findUnique({
@@ -32,7 +30,7 @@ export async function POST(req: Request) {
 
     // Check for existing user with phone number
     const existingUser = await db.user.findUnique({
-      where: { phoneNumber },
+      where: { phoneNumber: phoneNumber as string | undefined },
     });
 
     if (existingUser) {
@@ -45,18 +43,31 @@ export async function POST(req: Request) {
       );
     }
 
-    // Create new user with hashed password
+ let profilePictureUrl: string | null = null;
+    if (profilePicture) {
+      profilePictureUrl = await uploadImage(
+       profilePicture,
+        "group-profiles"
+      );
+
+      if (!profilePictureUrl) {
+        return NextResponse.json(
+          { error: "Error uploading profile picture" },
+          { status: 400 }
+        );
+      }
+    }
+
     const hashedPassword = await hash(password, 10);
     const newUser = await db.user.create({
       data: {
         firstName,
         lastName,
         phoneNumber,
-        baptismalName: baptismalName || null,
+        baptismalName,
         password: hashedPassword,
-        role: {
-          connect: { roleId: Number(roleId) },
-        },
+        roleId,
+        profilePicture: profilePictureUrl,
       },
     });
 
@@ -105,7 +116,11 @@ export async function GET(req: Request) {
     // Base query with role inclusion
     const baseQuery = {
       include: {
-        role: true,
+        role: {
+          select:{
+            roleName:true,
+          }
+        },
       },
       select: {
         id: true,
@@ -124,7 +139,11 @@ export async function GET(req: Request) {
       const user = await db.user.findUnique({
         where: { userId: Number(id) },
         include: {
-          role: true,
+          role: {
+            select:{
+              roleName:true,
+            }
+          },
         },
       });
 
@@ -165,7 +184,11 @@ export async function GET(req: Request) {
         createdAt: 'desc'
       },
       include: {
-        role: true,
+        role: {
+          select:{
+            roleName:true,
+          }
+        },
       }
     });
 
