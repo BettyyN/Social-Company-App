@@ -1,116 +1,97 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+import { db } from "@/lib/db";
+import { uploadImage } from "@/lib/uploadImage";
 import { NextRequest, NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
-export async function POST(req:NextRequest){
-  try{
-    const body = await req.json();
-    if(!body.title || !body.authorId){
-      return NextResponse.json({
-        error:"add all required field"
-      },
-    {
-      status:400
-    }
-  )
-    }
-    const newPost = await prisma.post.create({
-      data:{
-        title: body.title,
-        description: body.description,
-        picture: body.picture,
-        authorId: Number(body.authorId),
-        groupId: body.groupId ? Number(body.groupId) : null,
-      }
-    })
-    return NextResponse.json(newPost, {status:201})
-  }
-  catch(error){
-    return NextResponse.json(
-      {  error:"Failed to create post"  },
-      { status:500}
-)
-  }
-}
+export async function POST(req: NextRequest) {
+  try {
+    const formData = await req.formData();
 
-export async function PUT(req:NextRequest){
-  try{
-    const { searchParams} = new URL(req.url);
-    const postId  =Number(searchParams.get('postId'))
-    const body = await req.json();
-    if(!postId){
-      return NextResponse.json ( 
-      { error : " postId is required"},
-      { status: 400 }
-      )
-    }
- const updatePost =await prisma.post.update({
-  where:{postId},
-  data:{
-    title: body.title,
-    description: body.description,
-    picture: body.picture,
-    authorId: Number(body.groupId),
-    groupId: body.groupId ? Number(body.groupId): null,
-  }
- })
- return NextResponse.json(updatePost)
-  }
-  catch(error){
-    return NextResponse.json(
-      { error : "Failed to update post" },
-    {  status: 500}
-  
-    )
-  }
-}
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const authorId = Number(formData.get("authorId"));
+    const postId = formData.get("postId")
+      ? Number(formData.get("postId"))
+      : null;
+    const picture = formData.get("picture") as File | null;
 
-export async function DELETE(req:NextRequest){
-  try{
-    const {searchParams}= new URL(req.url);
-    const postId = Number(searchParams.get('postId'))
-    if(!postId){
+    if (!title || !description || !authorId) {
       return NextResponse.json(
-        {error:"Post Id is requeied"},
-        {status:400}
-      )
+        { error: "title, description, and authorId are required" },
+        { status: 400 }
+      );
     }
-    await prisma.post.delete({
-      where:{postId}
-    })
+
+    // Optional image upload
+    let pictureUrl: string | null = null;
+    if (picture) {
+      pictureUrl = await uploadImage(picture, "post-images");
+
+      if (!pictureUrl) {
+        return NextResponse.json(
+          { error: "Failed to upload image" },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Optional: Validate postId exists
+    if (postId) {
+      const post = await db.post.findUnique({ where: { postId } });
+      if (!post) {
+        return NextResponse.json({ error: "post not found" }, { status: 404 });
+      }
+    }
+
+    const newPost = await db.post.create({
+      data: {
+        title,
+        description,
+        picture: pictureUrl,
+        authorId,
+        postId: postId ?? undefined,
+      },
+    });
+
     return NextResponse.json(
-      { message:"post deleted successfully"},
-      {status:200}
-    )
-  }
-  catch(error){
+      { post: newPost, message: "Post created successfully" },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("Post creation error:", error);
     return NextResponse.json(
-      { error: "The post deletion failed"},
-      {status: 500}
-    )
+      { error: "Internal server error", details: (error as Error).message },
+      { status: 500 }
+    );
   }
 }
 
-export async function GET(req:NextRequest){
-  try{
-    const {searchParams}=new URL(req.url);
-    const posts = await prisma.post.findMany({
-      where:{
-        authorId:
-        searchParams.get('authorId')? Number(searchParams.get('authorId')):undefined,
-        groupId: searchParams.get('groupId')? Number(searchParams.get('groupId')):undefined
-      },
-      include:{
-        author: true,
-        comments:true
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const postId = Number(searchParams.get("id"));
+    if (postId) {
+      const post = await db.post.findUnique({
+        where: {
+          postId: postId,
+        },
+      });
+      if (!post) {
+        return NextResponse.json({ error: "post not found" }, { status: 404 });
       }
-    })
-    return NextResponse.json(posts)
-  }
-  catch(error){
+      return NextResponse.json(post, { status: 200 });
+    }
+
+    const posts = await db.post.findMany({
+      orderBy: {
+        postId: "asc",
+      },
+    });
+    return NextResponse.json(posts, { status: 200 });
+  } catch (error) {
+    console.log(error);
     return NextResponse.json(
-      {error:"Failed to fetch posts"},
-      {status:500}
-    )
+      { error: "Internal Server error" },
+      { status: 500 }
+    );
   }
 }
