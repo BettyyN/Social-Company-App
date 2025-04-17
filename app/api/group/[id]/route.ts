@@ -1,25 +1,43 @@
 import { db } from "@/lib/db";
-import { NextResponse } from "next/server";
+import { uploadImage } from "@/lib/uploadImage";
+import { NextRequest, NextResponse } from "next/server";
 
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const body = await request.json();
+    const formData = await request.formData();
     const groupId = Number(params.id);
+    const groupName= formData.get("groupName") as string;
+    const groupDescription = formData.get("groupDescription") as string;
+    const profilePicture = formData.get("profilePicture") as File || null;
     if (isNaN(groupId)){
         return NextResponse.json(
             {message:"Invalid group ID"},
             {status:400}
         )
     }
-    const updatedGroup = await db.group.update({
-        where: {groupId:groupId},
-        data:{
-            groupName: body.groupName,
-            groupDescription: body.groupDescription,
-            profilePicture: body.profilePicture,
+    let profilePictureUrl: string | null = null;
+        if (profilePicture) {
+          profilePictureUrl = await uploadImage(
+           profilePicture,
+            "group-profiles"
+          );
+    
+          if (!profilePictureUrl) {
+            return NextResponse.json(
+              { error: "Error uploading profile picture" },
+              { status: 400 }
+            );
+          }
         }
-    })
+    const updatedGroup = await db.group.update({
+      where: { groupId: groupId },
+      data: {
+        groupName,
+        groupDescription,
+        profilePicture: profilePictureUrl,
+      },
+    });
     if(!updatedGroup){
         return NextResponse.json({message:"group not found"},{status:400})
     }
