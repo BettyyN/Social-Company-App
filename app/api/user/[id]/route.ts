@@ -1,8 +1,9 @@
 import { db } from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { hash } from "bcrypt";
 import { userSchema, userSchemaPartial } from "@/schema/userSchema";
 import { z, ZodError } from "zod";
+import { uploadImage } from "@/lib/uploadImage";
 // import { RoleType } from "@prisma/client";
 
 export async function DELETE(
@@ -10,7 +11,6 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Validate ID format
     if (!params.id || typeof params.id !== "string") {
       return NextResponse.json(
         { error: "Invalid user ID format" },
@@ -18,7 +18,6 @@ export async function DELETE(
       );
     }
 
-    // Perform actual database deletion
     const deletedUser = await db.user.delete({
       where: { userId: Number(params.id) },
     });
@@ -46,127 +45,59 @@ export async function DELETE(
   }
 }
 
-
-export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    // Validate user ID
-    if (!params.id || isNaN(Number(params.id))) {
-      return NextResponse.json(
-        { message: "Valid user ID is required" },
-        { status: 400 }
-      );
-    }
     const userId = Number(params.id);
-
-    // Parse and validate request body
-    const body = await req.json();
-    const parsedData = userSchemaPartial.parse(body);
-    const { password, role, ...otherFields } = parsedData;
-
-    // Check user existence first
-    const existingUser = await db.user.findUnique({
-      where: { userId },
-      include: { role: true },
-    });
-
-    if (!existingUser) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    if (!userId) {
+      return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
     }
 
-    // Prepare update data
-    const updateData: any = { ...otherFields };
+    const formData = await req.formData();
 
-    // Handle role update
-    if (typeof role !== "undefined") {
-      if (role) {
-        // Find existing role
-        const roleRecord = await db.role.findFirst({
-          where: {
-            OR: [
-              { roleId: Number(role) }, // Allow ID reference
-              { roleName: role }, // Or name reference
-            ],
-          },
-        });
+    const user = await db.user.findUnique({ where: { userId } });
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
 
-        if (!roleRecord) {
-          return NextResponse.json(
-            { error: "Role not found - create it first" },
-            { status: 400 }
-          );
-        }
+    // Optional updates
+    const firstName = formData.get("firstName") as string | null;
+    const lastName = formData.get("lastName") as string | null;
+    const baptismalName = formData.get("baptismalName") as string | null;
+    const phoneNumber = formData.get("phoneNumber") as string | null;
+    const password = formData.get("password") as string | null;
+    const roleId = formData.get("roleId") ? Number(formData.get("roleId")) : null;
+    const profilePicture = formData.get("profilePicture") as File | null;
 
-        updateData.role = { connect: { roleId: roleRecord.roleId } };
-      } else {
-        // Remove role association
-        if (existingUser.role) {
-          updateData.role = { disconnect: true };
-        }
+    let profilePictureUrl = user.profilePicture;
+    if (profilePicture) {
+      const uploadUrl = await uploadImage(profilePicture, "group-profiles");
+      if (!uploadUrl) {
+        return NextResponse.json({ error: "Image upload failed" }, { status: 400 });
       }
+      profilePictureUrl = uploadUrl;
     }
 
-    // Handle password update
-    if (password) {
-      if (typeof password === "string") {
-        if (password.length < 8) {
-          return NextResponse.json(
-            { error: "Password must be at least 8 characters" },
-            { status: 400 }
-          );
-        }
-        updateData.password = await hash(password, 10);
-      } else {
-        return NextResponse.json(
-          { error: "Invalid password format" },
-          { status: 400 }
-        );
-      }
-    }
-
-    // Perform the update
     const updatedUser = await db.user.update({
       where: { userId },
-      data: updateData,
-      include: {
-        role: {
-          select: {
-            roleId: true,
-            roleName: true,
-            description: true,
-          },
-        },
+      data: {
+        firstName: firstName ?? undefined,
+        lastName: lastName ?? undefined,
+        baptismalName: baptismalName ?? undefined,
+        phoneNumber: phoneNumber ?? undefined,
+        roleId: roleId ?? undefined,
+        profilePicture: profilePictureUrl,
+        password: password ? await hash(password, 10) : undefined,
       },
     });
 
-    // Sanitize response
-    const { password: _, ...safeUserData } = updatedUser;
+    const { password: _, ...userWithoutPassword } = updatedUser;
 
     return NextResponse.json(
-      { user: safeUserData, message: "User updated successfully" },
+      { user: userWithoutPassword, message: "User updated successfully" },
       { status: 200 }
     );
   } catch (error) {
-    console.error("User update error:", error);
-
-    // Handle validation errors
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Validation error", details: error.errors },
-        { status: 400 }
-      );
-    }
-
-    // Handle Prisma errors
-    if ((error as any).code === "P2025") {
-      return NextResponse.json(
-        { error: "User/Role not found" },
-        { status: 404 }
-      );
-    }
-
+    console.error("Update error:", error);
     return NextResponse.json(
       { error: "Internal server error", details: (error as Error).message },
       { status: 500 }
