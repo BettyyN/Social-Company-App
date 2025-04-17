@@ -24,15 +24,16 @@ model User {
   password               String
   createdAt              DateTime        @default(now())
   deletedAt              DateTime?
-  Post                   Post[]
-  like                   Like[]
-  comment                Comment[]
-  memberships            GroupMember[]
+  posts UserPost[]
+  comments UserComment[]
+ likes UserLike[]
+  groupMemberships            GroupMember[]
   role                   Role            @relation(fields: [roleId], references: [roleId])
   roleId                 Int
   sentDirectMessages     DirectMessage[] @relation("MessageSender")
   receivedDirectMessages DirectMessage[] @relation("MessageReceiver")
   groupMessages          GroupMessage[]  @relation("GroupMessageSender")
+
 }
 
 model Post {
@@ -40,40 +41,69 @@ model Post {
   title       String
   description String
   picture     String?
-  author      User      @relation(fields: [authorId], references: [userId])
   authorId    Int
   createdAt  DateTime @default(now())
-  likes       Like[]
-  comments    Comment[]
   group       Group?    @relation(fields: [groupId], references: [groupId])
   groupId     Int?
+  userPosts   UserPost[]
+  like Like[]
+  Comment Comment[]
    @@index([authorId]) 
   @@index([createdAt]) 
 }
 
-model Like {
-  likeId    Int       @id @default(autoincrement())
-  post      Post      @relation(fields: [postId], references: [postId])
-  postId    Int
-  user      User      @relation(fields: [userId], references: [userId])
-  userId    Int
-  createdAt DateTime  @default(now())
+model UserPost{
+  userId Int
+  postId Int
+  user User @relation(fields:[userId], references: [userId])
+  post Post @relation(fields:[postId], references: [postId])
+  createdAt DateTime @default(now())
   deletedAt DateTime?
-
-  @@unique([postId, userId])
+  @@id([userId,postId])
 }
+
+
+model Like {
+  likeId     Int       @id @default(autoincrement())
+  post       Post      @relation(fields: [postId], references: [postId])
+  postId     Int
+  userLikes  UserLike[] 
+  createdAt  DateTime  @default(now())
+  deletedAt  DateTime?
+}
+
+
+model UserLike {
+  userId   Int
+  likeId   Int
+  user     User @relation(fields: [userId], references: [userId])
+  like     Like @relation(fields: [likeId], references: [likeId])
+  createdAt DateTime @default(now())
+  deletedAt DateTime?
+  @@unique([userId, likeId]) // Prevents duplicate likes by same user
+  @@id([userId, likeId])
+}
+
 
 model Comment {
   commentId Int       @id @default(autoincrement())
+  message String
+  userComment UserComment[]
   post      Post      @relation(fields: [postId], references: [postId])
   postId    Int
-  user      User      @relation(fields: [userId], references: [userId])
-  userId    Int
   createdAt DateTime  @default(now())
   deletedAt DateTime?
-  message String
   @@index([postId])
+}
 
+model UserComment{
+  userId Int
+  commentId Int
+  user User @relation(fields:[userId], references: [userId])
+  comment Comment @relation(fields:[commentId], references: [commentId])
+  createdAt DateTime @default(now())
+  deletedAt DateTime?
+  @@id([userId,commentId])
 }
 
 model Group {
@@ -94,9 +124,7 @@ model GroupMember {
   userId        Int
   group         Group @relation(fields: [groupId], references: [groupId])
   groupId       Int
-
   joinedAt DateTime @default(now())
-
   @@unique([userId, groupId])
 }
 
@@ -138,7 +166,6 @@ model DirectMessage {
   message    String
   createdAt  DateTime  @default(now())
   deletedAt  DateTime?
-
   @@unique([senderId, receiverId])
 }
 
