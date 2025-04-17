@@ -4,9 +4,20 @@ import { uploadImage } from "@/lib/uploadImage";
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const formData = await req.formData();
+    const groupName = formData.get("groupName") as string;
+    const groupDescription = formData.get("groupDescription") as string;
+    const profilePicture = formData.get("profilePicture") as File | null;
+     
+    if (!groupName || !groupDescription) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
     const existingGroup = await db.group.findFirst({
-      where: { groupName: body.groupName },
+      where: { groupName },
     });
 
     if (existingGroup) {
@@ -20,9 +31,9 @@ export async function POST(req: NextRequest) {
     }
 
     let profilePictureUrl: string | null = null;
-    if (body.profilePicture) {
+    if (profilePicture) {
       profilePictureUrl = await uploadImage(
-        body.profilePicture,
+       profilePicture,
         "group-profiles"
       );
 
@@ -36,8 +47,8 @@ export async function POST(req: NextRequest) {
 
     const newGroup = await db.group.create({
       data: {
-        groupName: body.groupName,
-        groupDescription: body.groupDescription,
+        groupName,
+        groupDescription,
         profilePicture: profilePictureUrl,
       },
     });
