@@ -5,13 +5,9 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
-
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
     const authorId = Number(formData.get("authorId"));
-    const postId = formData.get("postId")
-      ? Number(formData.get("postId"))
-      : null;
     const picture = formData.get("picture") as File | null;
 
     if (!title || !description || !authorId) {
@@ -34,13 +30,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Optional: Validate postId exists
-    if (postId) {
-      const post = await db.post.findUnique({ where: { postId } });
-      if (!post) {
-        return NextResponse.json({ error: "post not found" }, { status: 404 });
-      }
-    }
+  
 
     const newPost = await db.post.create({
       data: {
@@ -48,7 +38,6 @@ export async function POST(req: NextRequest) {
         description,
         picture: pictureUrl,
         authorId,
-        postId: postId ?? undefined,
       },
     });
 
