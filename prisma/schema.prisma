@@ -25,15 +25,17 @@ model User {
   createdAt              DateTime        @default(now())
   deletedAt              DateTime?
   posts UserPost[]
-  comments UserComment[]
- likes UserLike[]
+  comments Comment[]
+ likes Like[]
   groupMemberships            GroupMember[]
   role                   Role            @relation(fields: [roleId], references: [roleId])
   roleId                 Int
   sentDirectMessages     DirectMessage[] @relation("MessageSender")
   receivedDirectMessages DirectMessage[] @relation("MessageReceiver")
   groupMessages          GroupMessage[]  @relation("GroupMessageSender")
-
+  Advertisement Advertisement[]
+  notificationsReceived Notification[] @relation("NotificationRecipient")
+  notificationsSent     Notification[] @relation("NotificationSender")
 }
 
 model Post {
@@ -46,10 +48,11 @@ model Post {
   group       Group?    @relation(fields: [groupId], references: [groupId])
   groupId     Int?
   userPosts   UserPost[]
-  like Like[]
-  Comment Comment[]
+  likes Like[]
+  Comments Comment[]
    @@index([authorId]) 
   @@index([createdAt]) 
+  Notification Notification[]
 }
 
 model UserPost{
@@ -65,46 +68,29 @@ model UserPost{
 
 model Like {
   likeId     Int       @id @default(autoincrement())
+  user       User      @relation(fields: [userId], references: [userId])
+  userId     Int
   post       Post      @relation(fields: [postId], references: [postId])
   postId     Int
-  userLikes  UserLike[] 
   createdAt  DateTime  @default(now())
   deletedAt  DateTime?
+
+  @@unique([userId, postId]) 
 }
-
-
-model UserLike {
-  userId   Int
-  likeId   Int
-  user     User @relation(fields: [userId], references: [userId])
-  like     Like @relation(fields: [likeId], references: [likeId])
-  createdAt DateTime @default(now())
-  deletedAt DateTime?
-  @@unique([userId, likeId]) // Prevents duplicate likes by same user
-  @@id([userId, likeId])
-}
-
 
 model Comment {
-  commentId Int       @id @default(autoincrement())
-  message String
-  userComment UserComment[]
-  post      Post      @relation(fields: [postId], references: [postId])
-  postId    Int
-  createdAt DateTime  @default(now())
-  deletedAt DateTime?
-  @@index([postId])
+  commentId  Int       @id @default(autoincrement())
+  message    String
+  user       User      @relation(fields: [userId], references: [userId])
+  userId     Int
+  post       Post      @relation(fields: [postId], references: [postId])
+  postId     Int
+  createdAt  DateTime  @default(now())
+  deletedAt  DateTime?
+
+  Notification Notification[]
 }
 
-model UserComment{
-  userId Int
-  commentId Int
-  user User @relation(fields:[userId], references: [userId])
-  comment Comment @relation(fields:[commentId], references: [commentId])
-  createdAt DateTime @default(now())
-  deletedAt DateTime?
-  @@id([userId,commentId])
-}
 
 model Group {
   groupId          Int            @id @default(autoincrement())
@@ -178,4 +164,31 @@ model GroupMessage {
   message   String
   createdAt DateTime  @default(now())
   deletedAt DateTime?
+}
+
+model Advertisement {
+  advertisementId Int      @id @default(autoincrement())
+  title           String
+  description     String
+  imageUrl        String?
+  user            User     @relation(fields: [userId], references: [userId])
+  userId          Int
+  createdAt       DateTime @default(now())
+  deletedAt       DateTime?
+}
+
+model Notification {
+  notificationId Int      @id @default(autoincrement())
+  message        String
+  isRead         Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  deletedAt      DateTime?
+  recipient      User     @relation("NotificationRecipient",fields: [recipientId], references: [userId])
+  recipientId    Int
+  sender         User?    @relation("NotificationSender", fields: [senderId], references: [userId])
+  senderId       Int?
+  post           Post? @relation(fields: [postId], references: [postId])
+  postId         Int?
+  comment        Comment? @relation(fields: [commentId], references: [commentId])
+  commentId      Int?
 }
