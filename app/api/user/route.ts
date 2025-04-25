@@ -11,8 +11,8 @@ export async function POST(req: NextRequest) {
     const phoneNumber = formData.get("phoneNumber") as string 
     const firstName = formData.get("firstName") as string
     const password= formData.get("password") as string
-     const lastName = formData.get("firstName") as string;
-      const baptismalName = formData.get("firstName") as string;
+     const lastName = formData.get("lastName") as string;
+      const baptismalName = formData.get("baptismalName") as string;
       const profilePicture = formData.get("profilePicture") as File | null;
 
 
