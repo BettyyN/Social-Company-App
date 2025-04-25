@@ -7,9 +7,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   try {
     const formData = await request.formData();
     const groupId = Number(params.id);
-    const groupName= formData.get("groupName") as string;
-    const groupDescription = formData.get("groupDescription") as string;
-    const profilePicture = formData.get("profilePicture") as File || null;
+    const groupName= formData.get("groupName") as string | null;
+    const groupDescription = formData.get("groupDescription") as string | null;
+    const profilePicture = (formData.get("profilePicture") as File) || null;
     if (isNaN(groupId)){
         return NextResponse.json(
             {message:"Invalid group ID"},
@@ -33,9 +33,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     const updatedGroup = await db.group.update({
       where: { groupId: groupId },
       data: {
-        groupName,
-        groupDescription,
-        profilePicture: profilePictureUrl,
+        groupName: groupName ?? undefined,
+        groupDescription: groupDescription ?? undefined,
+        profilePicture: profilePictureUrl ,
       },
     });
     if(!updatedGroup){
