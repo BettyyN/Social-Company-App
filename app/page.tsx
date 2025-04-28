@@ -1,31 +1,30 @@
 import Image from "next/image";
-import heroBackground from "../public/nn.jpg";
+import heroBackground from "../public/nnn.jpg";
 import Header from "../Components/header";
 import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="h-screen w-full overflow-hidden relative">
-      {/* Background image */}
+    <main className="h-screen w-full overflow-hidden relative bg-[#F5F7FA]">
+      {/* Background image
       <div className="absolute inset-0 z-0">
         <Image
           src={heroBackground}
           alt="Begenra Institute Background"
           fill
-          className="object-cover brightness-90"
+          className="object-cover"
           priority
-          quality={80}
         />
-      </div>
+      </div> */}
 
       {/* Overlay + Header */}
-      <div className="absolute inset-0 z-10 bg-black/10 backdrop-blur-[2px]">
+      <div className="absolute inset-0 z-10 ">
         <Header />
       </div>
 
       {/* Hero content */}
-      <div className="relative z-20 h-full flex items-center justify-center text-neutral-content text-center px-4">
-        <div className="max-w-md md:max-w-xl">
+      <div className="relative  h-full flex text-neutral-content w-full items-center gap-6">
+        <div className="w-2/3 p-28">
           <h1 className="mb-5 md:text-5xl text-2xl font-bold text-[#7300ff]">
             Selam,
           </h1>
@@ -49,6 +48,13 @@ export default function Home() {
               </button>
             </Link>
           </div>
+        </div>
+        <div className="w-1/3 relative">
+          <Image
+            src={heroBackground}
+            alt="Begenra Institute Background"
+            className="h-72 w-52"
+          />
         </div>
       </div>
     </main>
