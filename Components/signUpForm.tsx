@@ -61,19 +61,18 @@ console.log("form", data);
 
   return (
     <div className="flex items-center justify-center">
-      <div className="p-8 rounded-lg w-full max-w-3xl">
+      <div className="p-8 rounded-lg w-full max-w-xl">
         <h2 className="text-2xl font-semibold text-center  mb-6">
           Create Account
         </h2>
-
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="space-y-4 grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {/** First Name */}
+          <div className="flex flex-col space-y-2 gap-3">
+            {/* First Name */}
             <div className="relative">
               <input
                 type="text"
                 {...register("firstName")}
-                className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md px-3 pt-2 pb-1 peer focus:outline-none focus:ring-2 ${
                   errors.firstName
                     ? "border-red-400 focus:ring-red-400"
                     : "border-gray-300 focus:ring-primary"
@@ -81,9 +80,9 @@ console.log("form", data);
                 placeholder=" "
               />
               <label
-                className="absolute left-3 top-1/3 bg-secondary px-1 text-sm text-gray-600 transition-all 
-    peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
-    peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
+                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-sm text-gray-600 transition-all 
+        peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
+        peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
               >
                 First Name *
               </label>
@@ -94,18 +93,23 @@ console.log("form", data);
               )}
             </div>
 
-            {/** Last Name */}
+            {/* Last Name */}
             <div className="relative">
               <input
                 type="text"
                 {...register("lastName")}
-                className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md px-3 pt-2 pb-1 peer focus:outline-none focus:ring-2 ${
                   errors.lastName
                     ? "border-red-400 focus:ring-red-400"
                     : "border-gray-300 focus:ring-primary"
                 }`}
+                placeholder=" "
               />
-              <label className="absolute left-3 top-0 bg-secondary px-1 text-sm text-gray-600 peer-focus:text-primary peer-focus:-translate-y-3 transition-all">
+              <label
+                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-sm text-gray-600 transition-all 
+        peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
+        peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
+              >
                 Last Name *
               </label>
               {errors.lastName && (
@@ -115,17 +119,23 @@ console.log("form", data);
               )}
             </div>
 
+            {/* Baptismal Name */}
             <div className="relative">
               <input
                 type="text"
                 {...register("baptismalName")}
-                className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md px-3 pt-2 pb-1 peer focus:outline-none focus:ring-2 ${
                   errors.baptismalName
                     ? "border-red-400 focus:ring-red-400"
                     : "border-gray-300 focus:ring-primary"
                 }`}
+                placeholder=" "
               />
-              <label className="absolute left-3 top-0 bg-secondary px-1 text-sm text-gray-600 peer-focus:text-primary peer-focus:-translate-y-3 transition-all">
+              <label
+                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-sm text-gray-600 transition-all 
+        peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
+        peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
+              >
                 Baptismal Name *
               </label>
               {errors.baptismalName && (
@@ -135,19 +145,23 @@ console.log("form", data);
               )}
             </div>
 
-            {/** Email */}
+            {/* Email */}
             <div className="relative">
               <input
                 type="email"
-                placeholder="doe@gmail.com"
                 {...register("email")}
-                className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md px-3 pt-2 pb-1 peer focus:outline-none focus:ring-2 ${
                   errors.email
                     ? "border-red-400 focus:ring-red-400"
                     : "border-gray-300 focus:ring-primary"
                 }`}
+                placeholder=" "
               />
-              <label className="absolute left-3 top-0 bg-secondary px-1 text-sm text-gray-600 peer-focus:text-primary peer-focus:-translate-y-3 transition-all">
+              <label
+                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-sm text-gray-600 transition-all 
+        peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
+        peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
+              >
                 Email *
               </label>
               {errors.email && (
@@ -157,19 +171,23 @@ console.log("form", data);
               )}
             </div>
 
-            {/** Phone Number */}
+            {/* Phone Number */}
             <div className="relative">
               <input
-                placeholder="+251"
                 type="tel"
                 {...register("phoneNumber")}
-                className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md px-3 pt-2 pb-1 peer focus:outline-none focus:ring-2 ${
                   errors.phoneNumber
                     ? "border-red-400 focus:ring-red-400"
                     : "border-gray-300 focus:ring-primary"
                 }`}
+                placeholder=" "
               />
-              <label className="absolute left-3 top-0 bg-secondary px-1 text-sm text-gray-600 peer-focus:text-primary peer-focus:-translate-y-3 transition-all">
+              <label
+                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-sm text-gray-600 transition-all 
+        peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
+        peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
+              >
                 Phone Number *
               </label>
               {errors.phoneNumber && (
@@ -179,18 +197,23 @@ console.log("form", data);
               )}
             </div>
 
-            {/** Password */}
+            {/* Password */}
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 {...register("password")}
-                className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md px-3 pt-2 pb-1 peer focus:outline-none focus:ring-2 ${
                   errors.password
                     ? "border-red-400 focus:ring-red-400"
                     : "border-gray-300 focus:ring-primary"
                 }`}
+                placeholder=" "
               />
-              <label className="absolute left-3 top-0 bg-secondary px-1 text-sm text-gray-600 peer-focus:text-primary peer-focus:-translate-y-3 transition-all">
+              <label
+                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-sm text-gray-600 transition-all 
+        peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
+        peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
+              >
                 Password *
               </label>
               <button
@@ -207,18 +230,23 @@ console.log("form", data);
               )}
             </div>
 
-            {/** Confirm Password */}
+            {/* Confirm Password */}
             <div className="relative">
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 {...register("confirmPassword")}
-                className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md px-3 pt-2 pb-1 peer focus:outline-none focus:ring-2 ${
                   errors.confirmPassword
                     ? "border-red-400 focus:ring-red-400"
                     : "border-gray-300 focus:ring-primary"
                 }`}
+                placeholder=" "
               />
-              <label className="absolute left-3 top-0 bg-secondary px-1 text-sm text-gray-600 peer-focus:text-primary peer-focus:-translate-y-3 transition-all">
+              <label
+                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-sm text-gray-600 transition-all 
+        peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
+        peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
+              >
                 Confirm Password *
               </label>
               <button
@@ -234,30 +262,29 @@ console.log("form", data);
                 </p>
               )}
             </div>
+            <div className="relative">
+              <button
+                type="submit"
+                className="w-full bg-[#7300ff] text-white py-3 rounded-md shadow-md hover:scale-105 transition-transform mt-6 flex items-center justify-center gap-2 "
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader size={20} className="animate-spin" />
+                  </>
+                ) : (
+                  "Create Account"
+                )}
+              </button>
+            </div>
           </div>
-          <button
-            type="submit"
-            className="w-full bg-[#7300ff] text-white py-3 mx-8 rounded-md shadow-md hover:scale-105 transition-transform mt-6 flex items-center justify-center gap-2 "
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <Loader size={20} className="animate-spin" />
-              </>
-            ) : (
-              "Create Account"
-            )}
-          </button>
         </form>
-           <h3 className="text-sm font-semibold text-center text-gray-700 mt-6">
-                 Already have an account? {""}
-                  <Link
-                    href="/auth/login"
-                    className="hover:underline text-[#7300ff]"
-                  >
-                    Login
-                  </Link>
-                </h3>
+        <h3 className="text-sm font-semibold text-center text-gray-700 mt-6">
+          Already have an account? {""}
+          <Link href="/auth/login" className="hover:underline text-[#7300ff]">
+            Login
+          </Link>
+        </h3>
       </div>
     </div>
   );
