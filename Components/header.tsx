@@ -10,7 +10,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="shadow-sm bg-white text-primary ">
+      <header className="shadow-sm  text-primary bg-white h-[60px]">
         <nav className="container mx-auto flex items-center justify-between p-2">
           {/* Logo */}
           <Link href="/" className="text-2xl font-semibold text-primary">
@@ -18,7 +18,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop Menu */}
-          <ul className="hidden space-x-6 lg:flex text-primary">
+          <ul className="hidden space-x-6 lg:flex text-[#4D4D4D]">
             <li>
               <Link href="/" className="hover:text-white">
                 Home
@@ -82,7 +82,7 @@ export default function Header() {
           <li>
             <Link
               href="/auth/signup"
-              className="block w-full text-center md:px-4 px-2 py-1 md:py-2 rounded bg-primary text-white hover:bg-opacity-80 hover:scale-103"
+              className="block w-full text-center md:px-8 px-2  rounded bg-primary text-white hover:bg-opacity-80 hover:scale-103 text-sm"
             >
               Sign Up
             </Link>
