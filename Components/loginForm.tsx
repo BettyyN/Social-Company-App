@@ -57,14 +57,14 @@ export default function LoginForm() {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="space-y-4 grid grid-cols-1 gap-6 text-black"
+          className="grid grid-cols-1 gap-6 text-black"
         >
           {/* phoneNumber Number */}
           <div className="relative">
             <input
               type="tel"
               {...register("phoneNumber")}
-              className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
+              className={` w-full border rounded-md py-2 peer focus:outline-none focus:ring-2 ${
                 errors.phoneNumber
                   ? "border-red-400 focus:ring-red-400"
                   : "border-gray-300 focus:ring-purple-500"
@@ -85,7 +85,7 @@ export default function LoginForm() {
             <input
               type="password"
               {...register("password")}
-              className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
+              className={`w-full border rounded-md py-2 peer focus:outline-none focus:ring-2 ${
                 errors.password
                   ? "border-red-400 focus:ring-red-400"
                   : "border-gray-300 focus:ring-purple-500"
@@ -103,7 +103,7 @@ export default function LoginForm() {
 
           <button
             type="submit"
-            className="w-full bg-[#7300ff] text-white py-3 rounded-xl shadow-md hover:scale-105 transition-transform mt-6"
+            className="w-full bg-[#7300ff] text-white py-3 rounded-xl shadow-md hover:scale-105 transition-transform "
           >
             Login
           </button>
