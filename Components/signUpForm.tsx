@@ -25,7 +25,6 @@ export default function SignupForm() {
       lastName: "",
       email: "",
       phoneNumber: "",
-      baptismalName: "",
       password: "",
       confirmPassword: "",
     },
@@ -66,13 +65,13 @@ console.log("form", data);
           Create Account
         </h2>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col space-y-2 gap-3">
+          <div className="flex flex-col gap-5 text-md">
             {/* First Name */}
             <div className="relative">
               <input
                 type="text"
                 {...register("firstName")}
-                className={`w-full border rounded-md px-3 pt-2 pb-1 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md px-1 py-2 peer focus:outline-none focus:ring-2 ${
                   errors.firstName
                     ? "border-red-400 focus:ring-red-400"
                     : "border-gray-300 focus:ring-primary"
@@ -80,7 +79,7 @@ console.log("form", data);
                 placeholder=" "
               />
               <label
-                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-sm text-gray-600 transition-all 
+                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-xs text-gray-600 transition-all 
         peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
         peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
               >
@@ -98,7 +97,7 @@ console.log("form", data);
               <input
                 type="text"
                 {...register("lastName")}
-                className={`w-full border rounded-md px-3 pt-2 pb-1 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md px-1 py-2 peer focus:outline-none focus:ring-2 ${
                   errors.lastName
                     ? "border-red-400 focus:ring-red-400"
                     : "border-gray-300 focus:ring-primary"
@@ -106,7 +105,7 @@ console.log("form", data);
                 placeholder=" "
               />
               <label
-                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-sm text-gray-600 transition-all 
+                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-xs text-gray-600 transition-all 
         peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
         peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
               >
@@ -119,38 +118,12 @@ console.log("form", data);
               )}
             </div>
 
-            {/* Baptismal Name */}
-            <div className="relative">
-              <input
-                type="text"
-                {...register("baptismalName")}
-                className={`w-full border rounded-md px-3 pt-2 pb-1 peer focus:outline-none focus:ring-2 ${
-                  errors.baptismalName
-                    ? "border-red-400 focus:ring-red-400"
-                    : "border-gray-300 focus:ring-primary"
-                }`}
-                placeholder=" "
-              />
-              <label
-                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-sm text-gray-600 transition-all 
-        peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
-        peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
-              >
-                Baptismal Name *
-              </label>
-              {errors.baptismalName && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.baptismalName?.message}
-                </p>
-              )}
-            </div>
-
             {/* Email */}
             <div className="relative">
               <input
                 type="email"
                 {...register("email")}
-                className={`w-full border rounded-md px-3 pt-2 pb-1 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md px-1 py-2 peer focus:outline-none focus:ring-2 ${
                   errors.email
                     ? "border-red-400 focus:ring-red-400"
                     : "border-gray-300 focus:ring-primary"
@@ -158,7 +131,7 @@ console.log("form", data);
                 placeholder=" "
               />
               <label
-                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-sm text-gray-600 transition-all 
+                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-xs text-gray-600 transition-all 
         peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
         peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
               >
@@ -176,7 +149,7 @@ console.log("form", data);
               <input
                 type="tel"
                 {...register("phoneNumber")}
-                className={`w-full border rounded-md px-3 pt-2 pb-1 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md px-1 py-2 peer focus:outline-none focus:ring-2 ${
                   errors.phoneNumber
                     ? "border-red-400 focus:ring-red-400"
                     : "border-gray-300 focus:ring-primary"
@@ -184,7 +157,7 @@ console.log("form", data);
                 placeholder=" "
               />
               <label
-                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-sm text-gray-600 transition-all 
+                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-xs text-gray-600 transition-all 
         peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
         peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
               >
@@ -198,74 +171,80 @@ console.log("form", data);
             </div>
 
             {/* Password */}
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                {...register("password")}
-                className={`w-full border rounded-md px-3 pt-2 pb-1 peer focus:outline-none focus:ring-2 ${
-                  errors.password
-                    ? "border-red-400 focus:ring-red-400"
-                    : "border-gray-300 focus:ring-primary"
-                }`}
-                placeholder=" "
-              />
-              <label
-                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-sm text-gray-600 transition-all 
+            <div className="relative flex md:flex-row flex-col gap-4  ">
+              <div className="relative w-1/2">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  {...register("password")}
+                  className={`w-full border rounded-md px-1 py-2 peer focus:outline-none focus:ring-2 ${
+                    errors.password
+                      ? "border-red-400 focus:ring-red-400"
+                      : "border-gray-300 focus:ring-primary"
+                  }`}
+                  placeholder=" "
+                />
+                <label
+                  className="absolute left-3 top-1/3 bg-slate-100 px-1 text-xs text-gray-600 transition-all 
         peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
         peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
-              >
-                Password *
-              </label>
-              <button
-                type="button"
-                className="absolute right-3 top-4"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-              </button>
-              {errors.password && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.password?.message}
-                </p>
-              )}
-            </div>
+                >
+                  Password *
+                </label>
+                <button
+                  type="button"
+                  className="absolute right-3 top-4"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <Eye size={13} /> : <EyeOff size={13} />}
+                </button>
+                {errors.password && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.password?.message}
+                  </p>
+                )}
+              </div>
 
-            {/* Confirm Password */}
-            <div className="relative">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                {...register("confirmPassword")}
-                className={`w-full border rounded-md px-3 pt-2 pb-1 peer focus:outline-none focus:ring-2 ${
-                  errors.confirmPassword
-                    ? "border-red-400 focus:ring-red-400"
-                    : "border-gray-300 focus:ring-primary"
-                }`}
-                placeholder=" "
-              />
-              <label
-                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-sm text-gray-600 transition-all 
+              {/* Confirm Password */}
+              <div className="relative w-1/2">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  {...register("confirmPassword")}
+                  className={`w-full border rounded-md px-1 py-2 peer focus:outline-none focus:ring-2 ${
+                    errors.confirmPassword
+                      ? "border-red-400 focus:ring-red-400"
+                      : "border-gray-300 focus:ring-primary"
+                  }`}
+                  placeholder=" "
+                />
+                <label
+                  className="absolute left-3 top-1/3 bg-slate-100 px-1 text-xs text-gray-600 transition-all 
         peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
         peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
-              >
-                Confirm Password *
-              </label>
-              <button
-                type="button"
-                className="absolute right-3 top-4"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-              </button>
-              {errors.confirmPassword && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.confirmPassword?.message}
-                </p>
-              )}
+                >
+                  Confirm Password *
+                </label>
+                <button
+                  type="button"
+                  className="absolute right-3 top-4"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? (
+                    <Eye size={13} />
+                  ) : (
+                    <EyeOff size={13} />
+                  )}
+                </button>
+                {errors.confirmPassword && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.confirmPassword?.message}
+                  </p>
+                )}
+              </div>
             </div>
-            <div className="relative">
+            <div className="relative flex items-center justify-center">
               <button
                 type="submit"
-                className="w-full bg-[#7300ff] text-white py-3 rounded-md shadow-md hover:scale-105 transition-transform mt-6 flex items-center justify-center gap-2 "
+                className=" bg-[#7300ff] text-white py-2 rounded-md shadow-md hover:scale-105 transition-transform mt-3  w-11/12 "
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -279,7 +258,7 @@ console.log("form", data);
             </div>
           </div>
         </form>
-        <h3 className="text-sm font-semibold text-center text-gray-700 mt-6">
+        <h3 className="text-sm font-semibold text-center text-gray-700 my-3">
           Already have an account? {""}
           <Link href="/auth/login" className="hover:underline text-[#7300ff]">
             Login
