@@ -38,17 +38,15 @@ export default function Header() {
 
           {/* Buttons */}
           <div className="hidden space-x-4 lg:flex">
-            <Link
-              href="/auth/signup"
-              className="px-4 py-2 rounded bg-primary text-white hover:bg-opacity-80"
-            >
-              Sign Up
+            <Link href="/auth/signup">
+              <button className="bg-[#7300ff] text-white px-4 py-2 text-sm font-medium rounded shadow-md transition-transform duration-300 hover:scale-105">
+                Sign Up
+              </button>
             </Link>
-            <Link
-              href="/auth/login"
-              className="px-4 py-2 rounded border border-primary text-white hover:bg-primary hover:text-white"
-            >
-              Log In
+            <Link href="/auth/login">
+              <button className="bg-[#7300ff] text-white px-4 py-2 text-sm font-medium rounded shadow-md transition-transform duration-300 hover:scale-105">
+                Log In
+              </button>
             </Link>
           </div>
 
