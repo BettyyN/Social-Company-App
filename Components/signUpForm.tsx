@@ -36,15 +36,14 @@ export default function SignupForm() {
 
   const [signup, { isLoading, error }] = useSignupMutation();
 
- 
   const onSubmit = async (data: UserFormData) => {
-    console.log("form",data)
+    console.log("form", data);
     try {
       const response = await signup({
         ...data,
-        role: "STUDENT",
+        role: 2,
       }).unwrap();
-console.log("form", data);
+      console.log("form", data);
       if (response.success) {
         toast.success("Account created successfully!");
         router.push("/auth/login");
@@ -57,6 +56,8 @@ console.log("form", data);
     }
   };
 
+  const handleFormSubmit = handleSubmit(onSubmit);
+
 
   return (
     <div className="flex items-center justify-center">
@@ -64,7 +65,7 @@ console.log("form", data);
         <h2 className="text-2xl font-semibold text-center  mb-6">
           Create Account
         </h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleFormSubmit}>
           <div className="flex flex-col gap-5 text-md">
             {/* First Name */}
             <div className="relative">
