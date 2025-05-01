@@ -9,7 +9,7 @@ export default function drawer() {
   return (
     <>
       <div
-        className={`h-screen bg-[#eff7ff] ${
+        className={`h-screen bg-[#F5F7FA] ${
           isOpen ? "w-64" : "w-16 bg-transparent shadow-2xl shadow-primary"
         } transition-all duration-300 flex flex-col relative`}
       >
@@ -22,8 +22,8 @@ export default function drawer() {
         </button>
         {/* Navigation */}
         {isOpen && (
-          <div className="flex flex-col flex-grow mt-16 space-y-2 text-sm text-[#162655]">
-            <ul className="flex flex-col w-full pl-5">
+          <div className="flex flex-col flex-grow mt-8 space-y-2 text-sm text-black">
+            <ul className="flex flex-col w-full ">
               <li className="flex w-full p-7 hover:bg-secondary rounded-4xl rounded-r-none rounded-e-xl transition-colors cursor-pointer h-10  gap-2 items-center hover:bg-[#FDFDFD]">
                 <FiMessageSquare size={24} className=" pt-1" />
                 <h1 className=" text-lg ">General</h1>
