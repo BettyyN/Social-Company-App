@@ -2,7 +2,7 @@
 
 export default function postCard() {
   return (
-    <div className="flex flex-col bg-[#e1d6fe] shadow-4xl shadow-indigo-600 h-80">
+    <div className="flex flex-col shadow-sm shadow-[#F8F8FA]  h-80">
       <div className="w-full rounded-full pt-5 pl-5 ">
         <span className="flex gap-1">
           <img
@@ -28,10 +28,7 @@ export default function postCard() {
             on Jetflix app Click the button to watch on Jetflix app Click the
             button to watch on Jetflix app Click the button to watch on Jetflix
             app Click the button to watch on Jetflix app Click the button to
-            watch on Jetflix app Click the button to watch on Jetflix app Click
-            the button to watch on Jetflix app Click the button to watch on
-            Jetflix app Click the button to watch on Jetflix app Click the
-            button to watch on Jetflix app
+            watch on Jetflix app Click the butt
           </p>
           <div className=" justify-end">
             <button className="bg-primary">Watch</button>
