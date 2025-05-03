@@ -13,7 +13,6 @@ export default function drawer() {
           isOpen ? "w-64" : "w-16 bg-transparent shadow-2xl shadow-primary"
         } transition-all duration-300 flex flex-col relative`}
       >
-        {/* Toggle Button */}
         <button
           className="text-primary p-5 self-end focus:outline-none flex "
           onClick={() => setIsOpen(!isOpen)}
