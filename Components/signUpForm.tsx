@@ -62,7 +62,7 @@ export default function SignupForm() {
   return (
     <div className="flex items-center justify-center">
       <div className="p-8 rounded-lg w-full max-w-xl">
-        <h2 className="text-2xl font-semibold text-center  mb-6">
+        <h2 className="text-2xl font-semibold text-center mb-6">
           Create Account
         </h2>
         <form onSubmit={handleFormSubmit}>
@@ -82,7 +82,7 @@ export default function SignupForm() {
               <label
                 className="absolute left-3 top-1/3 bg-slate-100 px-1 text-xs text-gray-600 transition-all 
         peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
-        peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
+        peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-1"
               >
                 First Name *
               </label>
