@@ -11,8 +11,8 @@ export default function postCard() {
           />
           <span className="flex flex-col text-sm pt-2">
             <h2>User Name</h2>
-            <h3 className="pl-2">2017/2/12</h3>
           </span>
+          <h3 className="pl-2 justify-end items-end">2017/2/12</h3>
         </span>
       </div>
       <div className="flex md:flex-row flex-col px-10">
