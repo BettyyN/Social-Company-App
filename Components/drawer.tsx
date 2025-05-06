@@ -9,8 +9,8 @@ export default function drawer() {
   return (
     <>
       <div
-        className={`h-screen bg-[#F5F7FA] ${
-          isOpen ? "w-64" : "w-16 bg-transparent shadow-2xl shadow-primary"
+        className={`h-screen bg-slate-50 ${
+          isOpen ? "w-full" : "w-16 bg-transparent shadow-2xl shadow-primary"
         } transition-all duration-300 flex flex-col relative`}
       >
         <button
