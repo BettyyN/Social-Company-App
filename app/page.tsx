@@ -23,7 +23,7 @@ export default function Home() {
             Selam,
           </h1>
           <h2 className="mb-5 md:text-2xl font-bold">
-            Kidus Yared Yebegena Maseltegna
+          Ethiopia
           </h2>
           <p className="mb-5 text-justify">
             Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
