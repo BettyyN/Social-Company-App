@@ -7,6 +7,7 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import HomeHeader from "@/Components/homeheader";
 import User from "@/Components/user";
+import ChatDrawer from "@/Components/chatDrawer";
 
 
 export default async function page() {
@@ -17,17 +18,20 @@ export default async function page() {
     const userName=(session?.user.firstName+" ").toString();
     return (
       <>
-        <div className="flex flex-row h-screen bg-[#FDFDFD] overflow-hidden">
-          <div className="flex">
+        <div className=" flex-row h-screen bg-[#FDFDFD] overflow-hidden grid grid-cols-[15%_67%_18%] ">
+          <div className="flex ">
             <Drawer />
           </div>
           <div className="flex-1 overflow-y-auto transition-margin duration-300 ">
-            <div className="md:mx-5">
+            <div className="md:mx-5 ">
               <HomeHeader userName={userName} />
             </div>
-            <div className="md:mx-15">
+            <div className="md:mx-15 ">
               <PostCard />
             </div>
+          </div>
+          <div className="flex-1 shadow-purple-100 shadow-lg bg-slate-50">
+            <ChatDrawer />
           </div>
         </div>
       </>
