@@ -4,6 +4,7 @@ import heroBackground from "../public/nature.jpg";
 import rose from "../public/r1.jpg";
 import Header from "../Components/header";
 import { useRouter } from "next/navigation";
+import ContactUs from "@/Components/contactUs";
 
 export default function Home() {
   const router = useRouter();
@@ -58,6 +59,7 @@ export default function Home() {
           />
         </div>
       </div>
+      <ContactUs/>
     </main>
   );
 }
