@@ -23,9 +23,7 @@ export default function Home() {
           <h1 className="mb-5 md:text-3xl text-2xl font-bold text-[#7300ff]">
             Selam,
           </h1>
-          <h2 className="mb-5 md:text-2xl font-bold">
-          Ethiopia
-          </h2>
+          <h2 className="mb-5 md:text-2xl font-bold">Ethiopia</h2>
           <p className="mb-5 text-justify">
             Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
             excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
@@ -59,7 +57,9 @@ export default function Home() {
           />
         </div>
       </div>
-      <ContactUs/>
+      <div className="relative">
+        <ContactUs />
+      </div>
     </main>
   );
 }
