@@ -18,7 +18,7 @@ export default async function page() {
     const userName=(session?.user.firstName+" ").toString();
     return (
       <>
-        <div className=" flex-row h-screen bg-[#FDFDFD] overflow-hidden grid grid-cols-[15%_67%_18%] ">
+        <div className=" flex-row h-screen bg-[#FDFDFD] overflow-hidden grid grid-cols-[20%_60%_20%] ">
           <div className="flex ">
             <Drawer />
           </div>
