@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FiMessageSquare, FiUsers, FiSettings, FiMenu, FiX } from "react-icons/fi";
+import { FiMessageSquare, FiUsers, FiSettings, FiMenu, FiX, FiPhone } from "react-icons/fi";
 import Link from "next/link";
 import UpcomingEvents from "./upcomingEvents";
 
@@ -22,14 +22,16 @@ export default function drawer() {
         </button>
         {/* Navigation */}
         {isOpen && (
-          <div className="flex flex-col flex-grow mt-8 space-y-2 text-sm text-black p-2">
-            <ul className="flex flex-col w-full ">
-              <li className="flex w-full p-7 hover:bg-secondary rounded-4xl rounded-r-none rounded-e-xl transition-colors cursor-pointer h-10  gap-2 items-center hover:bg-[#FDFDFD]">
-                <FiMessageSquare size={24} className=" pt-1" />
-                <h1 className=" text-lg ">General</h1>
+          <div className="flex flex-col flex-grow mt-8 space-y-2 text-sm p-2 text-[#4D4D4D]">
+            <ul className="flex flex-col w-full">
+              <li className="flex items-center w-full px-6 py-3 hover:bg-secondary rounded-e-2xl transition-colors cursor-pointer gap-4 h-14">
+                <FiMessageSquare size={24} className="text-gray-700" />
+                <span className="text-base font-semibold text-gray-900">
+                  General
+                </span>
               </li>
             </ul>
-            <UpcomingEvents />
+
           </div>
         )}
       </div>
