@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { FaSearch } from 'react-icons/fa';
+import UpcomingEvents from './upcomingEvents';
 
 
 
@@ -50,6 +51,9 @@ function chatDrawer() {
               <span className="pl-1"> bin </span> <span> last </span>
             </div>
           </div>
+        </div>
+        <div className='w-full p-3'>
+          <UpcomingEvents />
         </div>
       </div>
     </>
