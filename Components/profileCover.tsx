@@ -13,7 +13,7 @@ function profileCover() {
             <img
               src="https://img.freepik.com/free-photo/cute-girl-with-blond-hair-smiling-camera_23-2148308783.jpg?w=360"
               alt="pro"
-              className=" w-24 h-24 rounded-full absolute -bottom-4 left-13"
+              className=" w-32 h-32 rounded-full absolute -bottom-4 left-13"
             />
             <button className="absolute m-3 p-1 w-36 h-10 border-none text-primary bg-white hover:scale-103 shadow-sm shadow-primary rounded-md transition duration-200">
               Edit Cover Photo
