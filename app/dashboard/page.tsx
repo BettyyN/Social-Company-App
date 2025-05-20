@@ -8,7 +8,7 @@ function page() {
           <li>
             <a>groupName</a>
             <button>Edit</button>
-            <button>Delete</button>
+            <button> Delete</button>
           </li>
         </ul>
       </div>
