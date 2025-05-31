@@ -14,7 +14,8 @@ export const user = z
       .max(13, "phone number not correct"),
     baptismalName: z
       .string()
-      .min(2, "Baptismal Name must be at least 2 characters"),
+      .min(2, "Baptismal Name must be at least 2 characters")
+      .optional(),
     password: z
       .string()
       .min(6, "Password must be at least 6 characters")
