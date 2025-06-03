@@ -37,22 +37,47 @@ export default function SignupForm() {
   const onSubmit = async (data: UserFormData) => {
     console.log("Form submitted with data:", data);
     try {
-      const response = await signup({
-        ...data,
-        role: 2,
-      }).unwrap();
+      // Create FormData object
+      const formData = new FormData();
+      formData.append("firstName", data.firstName);
+      formData.append("lastName", data.lastName);
+      formData.append("email", data.email);
+      formData.append("phoneNumber", data.phoneNumber);
+      formData.append("password", data.password);
+      formData.append("confirmPassword", data.confirmPassword);
+      formData.append("role", "2"); // Convert to string
 
-      console.log("Signup API response:", response);
+      // Log FormData contents for debugging
+      console.log("FormData contents:");
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+
+      // Send as form data
+      const response = await signup(formData).unwrap();
 
       if (response.success) {
         toast.success("Account created successfully!");
         router.push("/auth/login");
       }
     } catch (err: any) {
-      console.error("Signup error:", err);
-      toast.error(
-        err.data?.message || "Registration failed. Please try again."
-      );
+      console.error("Detailed Signup Error:", {
+        status: err.status,
+        data: err.data,
+        originalError: err,
+      });
+
+      // Improved error message
+      let errorMessage = "Registration failed. Please try again.";
+      if (err.data?.details) {
+        errorMessage = err.data.details;
+      } else if (err.data?.message) {
+        errorMessage = err.data.message;
+      } else if (err.status === 400) {
+        errorMessage = "Invalid request. Please check your input.";
+      }
+
+      toast.error(errorMessage);
     }
   };
   useEffect(() => {
@@ -228,7 +253,7 @@ export default function SignupForm() {
                   Confirm Password *
                 </label>
                 <button
-                  type="submit"
+                  type="button"
                   className="absolute right-3 top-4"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
