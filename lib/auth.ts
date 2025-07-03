@@ -43,7 +43,9 @@ export const authOptions: NextAuthOptions = {
         console.log("User Data from DB:", existingUser);
 
         return {
-          id:`${ existingUser.userId}`,
+          id: `${existingUser.userId}`,
+          userId: `${existingUser.userId}`,
+          roleId: `${existingUser.roleId}`,
           firstName: existingUser.firstName,
           lastName: existingUser.lastName,
           phoneNumber: existingUser.phoneNumber || '',
@@ -52,25 +54,38 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks:{
-    async jwt({token, user}){
-        if(user){
-            return {
-              ...token,
-              phoneNumber: user.phoneNumber,
-              firstName: user.firstName,
-              lastName: user.lastName,
-            };
-        }
-        return token;
+    async jwt({ token, user }) {
+      if (user) {
+        const customUser = user as unknown as {
+          userId: string | number;
+          phoneNumber: string;
+          firstName: string;
+          lastName: string;
+          roleId:string;
+        };
+    
+        return {
+          ...token,
+          userId: customUser.userId,
+          phoneNumber: customUser.phoneNumber,
+          firstName: customUser.firstName,
+          lastName: customUser.lastName,
+          roleId: customUser.roleId,
+        };
+      }
+      return token;
     },
+    
     async session({session, user, token}){
         return {
           ...session,
           user: {
             ...session.user,
+            userId: token.userId,
             phoneNumber: token.phoneNumber,
             firstName: token.firstName,
             lastName: token.lastName,
+            roleId: token.roleId,
           },
         };
     }
