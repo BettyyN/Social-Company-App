@@ -1,6 +1,6 @@
 
 
-function profilePost() {
+function profilePost({ userId: string }) {
   return (
     <div className="flex flex-col shadow-4xl shadow-indigo-600 h-80">
       <div className="w-full rounded-full pt-5 pl-5 ">
