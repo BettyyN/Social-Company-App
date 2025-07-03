@@ -64,6 +64,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     const lastName = formData.get("lastName") as string | null;
     const baptismalName = formData.get("baptismalName") as string | null;
     const phoneNumber = formData.get("phoneNumber") as string | null;
+    const email = formData.get("email") as string | null;
     const password = formData.get("password") as string | null;
     const roleId = formData.get("roleId") ? Number(formData.get("roleId")) : null;
     const profilePicture = formData.get("profilePicture") as File | null;
@@ -84,6 +85,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         lastName: lastName ?? undefined,
         baptismalName: baptismalName ?? undefined,
         phoneNumber: phoneNumber ?? undefined,
+        email: email ?? undefined,
         roleId: roleId ?? undefined,
         profilePicture: profilePictureUrl,
         password: password ? await hash(password, 10) : undefined,
