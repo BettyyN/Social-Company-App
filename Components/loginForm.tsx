@@ -64,13 +64,13 @@ export default function LoginForm() {
             <input
               type="tel"
               {...register("phoneNumber")}
-              className={` w-full border rounded-md py-2 peer focus:outline-none focus:ring-2 ${
+              className={` w-full border rounded-md py-3 px-3 peer focus:outline-none focus:ring-2 ${
                 errors.phoneNumber
                   ? "border-red-400 focus:ring-red-400"
                   : "border-gray-300 focus:ring-purple-500"
               }`}
             />
-            <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
+            <label className="absolute left-3 top-0  px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-2 peer-focus:bg-white transition-all">
               Phone Number
             </label>
             {errors.phoneNumber && (
@@ -85,13 +85,13 @@ export default function LoginForm() {
             <input
               type="password"
               {...register("password")}
-              className={`w-full border rounded-md py-2 peer focus:outline-none focus:ring-2 ${
+              className={`w-full border rounded-md py-3 px-3 peer focus:outline-none focus:ring-2 ${
                 errors.password
                   ? "border-red-400 focus:ring-red-400"
                   : "border-gray-300 focus:ring-purple-500"
               }`}
             />
-            <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-3 transition-all">
+            <label className="absolute left-3 top-0 bg-white px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-2 peer-focus:bg-white transition-all">
               Password
             </label>
             {errors.password && (
@@ -110,10 +110,7 @@ export default function LoginForm() {
         </form>
         <h3 className="text-sm font-semibold text-center text-gray-700 mt-6">
           Didn't have an account?{" "}
-          <Link
-            href="/auth/signup"
-            className="hover:underline text-[#7300ff]"
-          >
+          <Link href="/auth/signup" className="hover:underline text-[#7300ff]">
             Sign Up
           </Link>
         </h3>
