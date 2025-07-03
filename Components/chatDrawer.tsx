@@ -24,13 +24,13 @@ function chatDrawer() {
               Recent Chats
             </h2>
             <div className="w-full flex py-3 gap-1">
-              <Link href={"/profile"}>
+              <Link href={"/profile/1"}>
                 <img
                   src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
                   className="rounded-full w-8 h-8"
                 />
               </Link>
-              <span className="pl-1"> bin </span> <span> last </span>
+              <span className="pl-1"> jon </span> <span> last </span>
             </div>
             <div className="w-full flex py-3 gap-1">
               <Link href={"/profile"}>
