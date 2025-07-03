@@ -1,6 +1,9 @@
+import { User} from "@prisma/client"
+interface ProfileCoverProps {
+  user: User;
+}
 
-
-function profileCover() {
+function profileCover({ user }: ProfileCoverProps) {
   return (
     <div>
       <main className="w-full h-[40vh] px-10 shadow-lg shadow-primary rounded-md">
@@ -22,8 +25,8 @@ function profileCover() {
 
           <div className="bg-white w-full pl-36 text-primary flex justify-between">
             <span>
-              <h1 className="text-lg font-bold"> Full name</h1>
-              <h2 className="text-md">Member</h2>
+              <h1 className="text-lg font-bold">{user.firstName} {user.lastName}</h1>
+              <h2 className="text-md">role</h2>
             </span>
             <span>
               <button className="p-1 w-32 h-8 border border-primary hover:bg-primary shadow-sm shadow-primary mr-5 mt-3 transition duration-200 hover:scale-103 rounded-lg">
