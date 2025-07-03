@@ -5,31 +5,35 @@ async function main() {
   await prisma.$executeRaw`DELETE FROM "User";`;
 
   // Reset the ID sequence
-  await prisma.$executeRaw`ALTER SEQUENCE "User_id_seq" RESTART WITH 1;`;
+  await prisma.$executeRaw`ALTER SEQUENCE "User_userId_seq" RESTART WITH 1;`;
 
   await prisma.role.createMany({
-    data: [{ role: "STUDENT" }, { role: "TEACHER" }, { role: "ADMIN" }],
+    data: [
+      { roleName: "STUDENT" },
+      { roleName: "TEACHER" },
+      { roleName: "ADMIN" },
+    ],
     skipDuplicates: true,
   });
-const adminRole = await prisma.role.findUnique({
-  where: { role: "ADMIN" },
-});
 
-  // Insert a sample user
+  const adminRole = await prisma.role.findUnique({
+    where: { roleName: "ADMIN" },
+  });
+  const bcrypt = require("bcrypt");
+  const hashedpassword = await bcrypt.hash("1234abcd",10);
+
   await prisma.user.create({
     data: {
       firstName: "John",
       lastName: "Doe",
-      email: "john@example.com",
-      password: "hashedpassword",
-      phoneNumber: "123456789",
-      roleId: adminRole.id,
+      password: hashedpassword,
+      phoneNumber: "0900000000",
+      roleId: adminRole.roleId,
     },
   });
-  console.log("Default roles seeded successfully");
-}
 
- 
+  console.log("Default roles and user seeded successfully");
+}
 
 main()
   .catch((e) => {
