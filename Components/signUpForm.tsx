@@ -31,29 +31,16 @@ export default function SignupForm() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const [signup, { isLoading }] = useSignupMutation();
 
   const onSubmit = async (data: UserFormData) => {
-    console.log("Form submitted with data:", data);
     try {
-      // Create FormData object
       const formData = new FormData();
-      formData.append("firstName", data.firstName);
-      formData.append("lastName", data.lastName);
-      formData.append("email", data.email);
-      formData.append("phoneNumber", data.phoneNumber);
-      formData.append("password", data.password);
-      formData.append("confirmPassword", data.confirmPassword);
-      formData.append("role", "2"); // Convert to string
+      Object.entries(data).forEach(([key, value]) =>
+        formData.append(key, value)
+      );
+      formData.append("roleId", "1");
 
-      // Log FormData contents for debugging
-      console.log("FormData contents:");
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-      }
-
-      // Send as form data
       const response = await signup(formData).unwrap();
 
       if (response.success) {
@@ -61,30 +48,14 @@ export default function SignupForm() {
         router.push("/auth/login");
       }
     } catch (err: any) {
-      console.error("Detailed Signup Error:", {
-        status: err.status,
-        data: err.data,
-        originalError: err,
-      });
-
-      // Improved error message
       let errorMessage = "Registration failed. Please try again.";
-      if (err.data?.details) {
-        errorMessage = err.data.details;
-      } else if (err.data?.message) {
-        errorMessage = err.data.message;
-      } else if (err.status === 400) {
-        errorMessage = "Invalid request. Please check your input.";
-      }
+      if (err.data?.details) errorMessage = err.data.details;
+      else if (err.data?.message) errorMessage = err.data.message;
+      else if (err.status === 400) errorMessage = "Invalid input.";
 
       toast.error(errorMessage);
     }
   };
-  useEffect(() => {
-    console.log("Validation Errors:", errors);
-  }, [errors]);
-  
-
 
   return (
     <div className="flex items-center justify-center">
@@ -92,30 +63,33 @@ export default function SignupForm() {
         <h2 className="text-2xl font-semibold text-center mb-6">
           Create Account
         </h2>
+
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-5 text-md">
             {/* First Name */}
             <div className="relative">
               <input
                 type="text"
+                placeholder=" "
                 {...register("firstName")}
-                className={`w-full border rounded-md px-1 py-2 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
                   errors.firstName
                     ? "border-red-400 focus:ring-red-400"
                     : "border-gray-300 focus:ring-primary"
                 }`}
-                placeholder=" "
               />
               <label
-                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-xs text-gray-600 transition-all 
-                peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
-                peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-1"
+                className="absolute left-3 text-sm text-gray-600 transition-all 
+                peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base 
+                peer-placeholder-shown:text-gray-400 
+                peer-focus:top-1 peer-focus:text-xs peer-focus:text-primary
+                "
               >
                 First Name *
               </label>
               {errors.firstName && (
                 <p className="text-red-500 text-xs mt-1">
-                  {errors.firstName?.message}
+                  {errors.firstName.message}
                 </p>
               )}
             </div>
@@ -124,24 +98,26 @@ export default function SignupForm() {
             <div className="relative">
               <input
                 type="text"
+                placeholder=" "
                 {...register("lastName")}
-                className={`w-full border rounded-md px-1 py-2 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
                   errors.lastName
                     ? "border-red-400 focus:ring-red-400"
                     : "border-gray-300 focus:ring-primary"
                 }`}
-                placeholder=" "
               />
               <label
-                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-xs text-gray-600 transition-all 
-                peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
-                peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
+                className="absolute left-3 text-sm text-gray-600 transition-all 
+                peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base 
+                peer-placeholder-shown:text-gray-400 
+                peer-focus:top-1 peer-focus:text-xs peer-focus:text-primary
+                "
               >
                 Last Name *
               </label>
               {errors.lastName && (
                 <p className="text-red-500 text-xs mt-1">
-                  {errors.lastName?.message}
+                  {errors.lastName.message}
                 </p>
               )}
             </div>
@@ -150,24 +126,26 @@ export default function SignupForm() {
             <div className="relative">
               <input
                 type="email"
+                placeholder=" "
                 {...register("email")}
-                className={`w-full border rounded-md px-1 py-2 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
                   errors.email
                     ? "border-red-400 focus:ring-red-400"
                     : "border-gray-300 focus:ring-primary"
                 }`}
-                placeholder=" "
               />
               <label
-                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-xs text-gray-600 transition-all 
-                peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
-                peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
+                className="absolute left-3 text-sm text-gray-600 transition-all 
+                peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base 
+                peer-placeholder-shown:text-gray-400 
+                peer-focus:top-1 peer-focus:text-xs peer-focus:text-primary
+                "
               >
                 Email *
               </label>
               {errors.email && (
                 <p className="text-red-500 text-xs mt-1">
-                  {errors.email?.message}
+                  {errors.email.message}
                 </p>
               )}
             </div>
@@ -176,46 +154,50 @@ export default function SignupForm() {
             <div className="relative">
               <input
                 type="tel"
+                placeholder=" "
                 {...register("phoneNumber")}
-                className={`w-full border rounded-md px-1 py-2 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
                   errors.phoneNumber
                     ? "border-red-400 focus:ring-red-400"
                     : "border-gray-300 focus:ring-primary"
                 }`}
-                placeholder=" "
               />
               <label
-                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-xs text-gray-600 transition-all 
-                peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
-                peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
+                className="absolute left-3 text-sm text-gray-600 transition-all 
+                peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base 
+                peer-placeholder-shown:text-gray-400 
+                peer-focus:top-1 peer-focus:text-xs peer-focus:text-primary
+                "
               >
                 Phone Number *
               </label>
               {errors.phoneNumber && (
                 <p className="text-red-500 text-xs mt-1">
-                  {errors.phoneNumber?.message}
+                  {errors.phoneNumber.message}
                 </p>
               )}
             </div>
 
-            {/* Password and Confirm Password */}
-            <div className="relative flex md:flex-row flex-col gap-4">
+            {/* Passwords */}
+            <div className="flex md:flex-row flex-col gap-4">
               {/* Password */}
-              <div className="relative w-1/2">
+              <div className="relative w-full">
                 <input
                   type={showPassword ? "text" : "password"}
+                  placeholder=" "
                   {...register("password")}
-                  className={`w-full border rounded-md px-1 py-2 peer focus:outline-none focus:ring-2 ${
+                  className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
                     errors.password
                       ? "border-red-400 focus:ring-red-400"
                       : "border-gray-300 focus:ring-primary"
                   }`}
-                  placeholder=" "
                 />
                 <label
-                  className="absolute left-3 top-1/3 bg-slate-100 px-1 text-xs text-gray-600 transition-all 
-                  peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
-                  peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
+                  className="absolute left-3 text-sm text-gray-600 transition-all 
+                  peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base 
+                  peer-placeholder-shown:text-gray-400 
+                  peer-focus:top-1 peer-focus:text-xs peer-focus:text-primary
+                  "
                 >
                   Password *
                 </label>
@@ -224,31 +206,33 @@ export default function SignupForm() {
                   className="absolute right-3 top-4"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <Eye size={13} /> : <EyeOff size={13} />}
+                  {showPassword ? <Eye size={16} /> : <EyeOff size={16} />}
                 </button>
                 {errors.password && (
                   <p className="text-red-500 text-xs mt-1">
-                    {errors.password?.message}
+                    {errors.password.message}
                   </p>
                 )}
               </div>
 
               {/* Confirm Password */}
-              <div className="relative w-1/2">
+              <div className="relative w-full">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
+                  placeholder=" "
                   {...register("confirmPassword")}
-                  className={`w-full border rounded-md px-1 py-2 peer focus:outline-none focus:ring-2 ${
+                  className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
                     errors.confirmPassword
                       ? "border-red-400 focus:ring-red-400"
                       : "border-gray-300 focus:ring-primary"
                   }`}
-                  placeholder=" "
                 />
                 <label
-                  className="absolute left-3 top-1/3 bg-slate-100 px-1 text-xs text-gray-600 transition-all 
-                  peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
-                  peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
+                  className="absolute left-3 text-sm text-gray-600 transition-all 
+                  peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base 
+                  peer-placeholder-shown:text-gray-400 
+                  peer-focus:top-1 peer-focus:text-xs peer-focus:text-primary
+                  "
                 >
                   Confirm Password *
                 </label>
@@ -258,25 +242,25 @@ export default function SignupForm() {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? (
-                    <Eye size={13} />
+                    <Eye size={16} />
                   ) : (
-                    <EyeOff size={13} />
+                    <EyeOff size={16} />
                   )}
                 </button>
                 {errors.confirmPassword && (
                   <p className="text-red-500 text-xs mt-1">
-                    {errors.confirmPassword?.message}
+                    {errors.confirmPassword.message}
                   </p>
                 )}
               </div>
             </div>
 
             {/* Submit Button */}
-            <div className="relative flex items-center justify-center">
+            <div className="flex justify-center">
               <button
                 type="submit"
-                className="bg-[#7300ff] text-white py-2 rounded-md shadow-md hover:scale-105 transition-transform mt-3 w-11/12"
                 disabled={isLoading}
+                className="bg-[#7300ff] text-white py-2 rounded-md shadow-md hover:scale-105 transition-transform mt-3 w-11/12 items-center"
               >
                 {isLoading ? (
                   <Loader size={20} className="animate-spin" />
