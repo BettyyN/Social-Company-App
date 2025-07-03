@@ -1,11 +1,11 @@
 function upcomingEvents() {
   return (
-    <div className="w-full shadow-gray-600 shadow-lg relative">
-      <div className="flex justify-between p-3 text-md font-bold">
+    <div className="w-full shadow-gray-600 shadow-lg relative p-2">
+      <div className="flex justify-between p-2 text-md font-bold">
         <h1>Upcoming Events</h1>
         <button className="text-purple-600">See All</button>
       </div>
-      <div className="bg-slate-200  p-2 mx-4 my-2 rounded-sm flex flex-col ">
+      <div className="bg-slate-100  p-2 mx-4 my-2 rounded-sm flex flex-col ">
         <span className="flex">
           <img
             src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
@@ -33,7 +33,7 @@ function upcomingEvents() {
             src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
             className="rounded-full w-6 h-6 -m-1.5"
           />
-          <h1 className="right-6 -my-2 absolute">112 reacted</h1>
+          <h1 className="right-8 -my-2 absolute">112 reacted</h1>
         </div>
       </div>
       
