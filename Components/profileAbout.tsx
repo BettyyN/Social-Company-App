@@ -1,7 +1,10 @@
 import { FaUser, FaPhone, FaBriefcase, FaBirthdayCake, FaUserShield } from "react-icons/fa";
+import { User } from "@prisma/client";
+interface ProfileAboutProps {
+  user: User;
+}
 
-
-export default function profileAbout() {
+export default function profileAbout({ user }: ProfileAboutProps) {
   return (
     <>
       <div className="w-64 h-[30rem] shadow-sm shadow-purple-400 p-5 text-primary flex flex-col">
@@ -9,11 +12,12 @@ export default function profileAbout() {
         <ul className="text-md space-y-3 pb-3 text-gray-500">
           <li className="border-b p-3 flex items-center gap-3 ">
             {" "}
-            <FaUser className="mr-2 text-primary" /> Full Name
+            <FaUser className="mr-2 text-primary" />
+            {user.firstName} {user.lastName}
           </li>
           <li className=" border-b p-3 flex items-center gap-3">
             {" "}
-            <FaPhone className="mr-2 text-primary" /> Phone Number
+            <FaPhone className="mr-2 text-primary" /> {user.phoneNumber}
           </li>
           <li className=" border-b p-3 flex items-center gap-3">
             <FaUser className="mr-2 text-primary" /> Baptismal Name
