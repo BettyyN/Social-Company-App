@@ -1,175 +1,108 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { user, UserFormData } from "../schema/user";
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react"; 
-import { useSignupMutation } from "../redux/api/authApi";
-import { useRouter } from "next/navigation";
-import { Loader } from "lucide-react";
-import { toast } from "sonner"; 
-import Link from "next/link";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createGroup } from "@/lib/createGroup";
+import { FiPlus, FiX } from "react-icons/fi";
 
-export default function SignupForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    setValue,
-  } = useForm<UserFormData>({
-    resolver: zodResolver(user),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      phoneNumber: "",
-      password: "",
-      confirmPassword: "",
+export default function CreateGroupPopup() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [groupName, setGroupName] = useState("");
+  const [groupDescription, setGroupDescription] = useState("");
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  const [error, setError] = useState("");
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: createGroup,
+    onSuccess: (data) => {
+      console.log("Group created:", data);
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
+      setIsOpen(false);
+      resetForm();
+    },
+    onError: (err: any) => {
+      setError(err?.response?.data?.message || "Something went wrong.");
     },
   });
-  const router = useRouter();
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const [signup, { isLoading, error }] = useSignupMutation();
-
-  const onSubmit = async (data: UserFormData) => {
-    console.log("form", data);
-    try {
-      const response = await signup({
-        ...data,
-        role: 2,
-      }).unwrap();
-      console.log("form", data);
-      if (response.success) {
-        toast.success("Account created successfully!");
-        router.push("/auth/login");
-      }
-    } catch (err: any) {
-      console.error("Signup error:", err);
-      toast.error(
-        err.data?.message || "Registration failed. Please try again."
-      );
+  const handleSubmit = () => {
+    if (!groupName || !groupDescription) {
+      setError("All fields are required.");
+      return;
     }
+
+    mutation.mutate({ groupName, groupDescription, profilePicture });
   };
 
-  const handleFormSubmit = handleSubmit(onSubmit);
-
+  const resetForm = () => {
+    setGroupName("");
+    setGroupDescription("");
+    setProfilePicture(null);
+    setError("");
+  };
 
   return (
-    <div className="flex items-center justify-center">
-      <div className="p-8 rounded-lg w-full max-w-xl">
-        <h2 className="text-2xl font-semibold text-center mb-6">
-          Create Account
-        </h2>
-        <form onSubmit={handleFormSubmit}>
-          <div className="flex flex-col gap-5 text-md">
-            {/* First Name */}
-            <div className="relative">
+    <>
+      <button
+        onClick={() => setIsOpen(true)}
+        className="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-primary/80"
+      >
+        <FiPlus /> Create Group
+      </button>
+
+      {isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white w-full max-w-md p-6 rounded-xl shadow-lg relative">
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                resetForm();
+              }}
+              className="absolute top-4 right-4 text-gray-500 hover:text-black"
+            >
+              <FiX size={20} />
+            </button>
+
+            <h2 className="text-xl font-semibold mb-4">Create Group</h2>
+
+            <div className="flex flex-col gap-3">
               <input
                 type="text"
-                {...register("firstName")}
-                className={`w-full border rounded-md px-1 py-2 peer focus:outline-none focus:ring-2 ${
-                  errors.firstName
-                    ? "border-red-400 focus:ring-red-400"
-                    : "border-gray-300 focus:ring-primary"
-                }`}
-                placeholder=" "
+                placeholder="Group Name"
+                value={groupName}
+                onChange={(e) => setGroupName(e.target.value)}
+                className="border rounded-md px-3 py-2 w-full"
               />
-              <label
-                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-xs text-gray-600 transition-all 
-        peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
-        peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-1"
-              >
-                First Name *
-              </label>
-              {errors.firstName && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.firstName?.message}
-                </p>
-              )}
-            </div>
 
-            {/* Last Name */}
-            <div className="relative">
+              <textarea
+                placeholder="Group Description"
+                value={groupDescription}
+                onChange={(e) => setGroupDescription(e.target.value)}
+                className="border rounded-md px-3 py-2 w-full resize-none"
+              />
+
               <input
-                type="text"
-                {...register("lastName")}
-                className={`w-full border rounded-md px-1 py-2 peer focus:outline-none focus:ring-2 ${
-                  errors.lastName
-                    ? "border-red-400 focus:ring-red-400"
-                    : "border-gray-300 focus:ring-primary"
-                }`}
-                placeholder=" "
+                type="file"
+                accept="image/*"
+                onChange={(e) => setProfilePicture(e.target.files?.[0] || null)}
+                className="w-full"
               />
-              <label
-                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-xs text-gray-600 transition-all 
-        peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
-        peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
-              >
-                Last Name *
-              </label>
-              {errors.lastName && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.lastName?.message}
-                </p>
-              )}
-            </div>
 
-            {/* Email */}
-            <div className="relative">
-              <input
-                type="email"
-                {...register("email")}
-                className={`w-full border rounded-md px-1 py-2 peer focus:outline-none focus:ring-2 ${
-                  errors.email
-                    ? "border-red-400 focus:ring-red-400"
-                    : "border-gray-300 focus:ring-primary"
-                }`}
-                placeholder=" "
-              />
-              <label
-                className="absolute left-3 top-1/3 bg-slate-100 px-1 text-xs text-gray-600 transition-all 
-        peer-placeholder-shown:top-0 peer-placeholder-shown:text-gray-600
-        peer-focus:top-0 peer-focus:text-primary peer-focus:-translate-y-3"
-              >
-                Email *
-              </label>
-              {errors.email && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.email?.message}
-                </p>
-              )}
-            </div>
+              {error && <p className="text-red-500 text-sm">{error}</p>}
 
-            
-            <div className="relative flex items-center justify-center">
               <button
-                type="submit"
-                className=" bg-[#7300ff] text-white py-2 rounded-md shadow-md hover:scale-105 transition-transform mt-3  w-11/12 "
-                disabled={isLoading}
+                onClick={handleSubmit}
+                disabled={mutation.status === "pending"}
+                className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90"
               >
-                {isLoading ? (
-                  <>
-                    <Loader size={20} className="animate-spin" />
-                  </>
-                ) : (
-                  "Create Account"
-                )}
+                {mutation.status === "pending" ? "Creating..." : "Create Group"}
               </button>
             </div>
           </div>
-        </form>
-        <h3 className="text-sm font-semibold text-center text-gray-700 my-3">
-          Already have an account? {""}
-          <Link href="/auth/login" className="hover:underline text-[#7300ff]">
-            Login
-          </Link>
-        </h3>
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 }
