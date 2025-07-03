@@ -19,6 +19,7 @@ model User {
   firstName              String
   lastName               String
   phoneNumber            String          @unique
+  email                  String?         @unique
   baptismalName          String?
   profilePicture         String?
   password               String
@@ -117,7 +118,7 @@ model GroupMember {
 model Role {
   roleId      Int          @id @default(autoincrement())
   roleName    String @unique
-  description String
+  description String?
   createdAt   DateTime     @default(now())
   deletedAt   DateTime?
   user        User[]
