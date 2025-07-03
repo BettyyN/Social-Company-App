@@ -9,7 +9,7 @@ export default function page() {
         <div className=" flex lg:flex-row flex-col">
           <div className="lg:w-2/5 w-full flex justify-center items-center">
             <img
-              src="/signup.svg"
+              src="/signup.png"
               alt="signup"
               className=" lg:w-[410px] lg:h-[410px] lg:top-3/5  z-10"
             />
