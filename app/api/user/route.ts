@@ -12,6 +12,7 @@ export async function POST(req: NextRequest) {
     const firstName = formData.get("firstName") as string
     const password= formData.get("password") as string
      const lastName = formData.get("lastName") as string;
+     const email = formData.get("email") as string | null;
       const baptismalName = formData.get("baptismalName") as string | null;
       const profilePicture = formData.get("profilePicture") as File | null;
 
@@ -65,6 +66,7 @@ export async function POST(req: NextRequest) {
         lastName,
         phoneNumber,
         baptismalName,
+        email,
         password: hashedPassword,
         roleId,
         profilePicture: profilePictureUrl,
