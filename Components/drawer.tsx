@@ -1,12 +1,22 @@
 "use client";
-
-import { useState } from "react";
-import { FiMessageSquare, FiUsers, FiSettings, FiMenu, FiX, FiPhone } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import { FiMessageSquare,FiEdit, FiSettings, FiMenu, FiX, FiPhone } from "react-icons/fi";
 import Link from "next/link";
-import UpcomingEvents from "./upcomingEvents";
+import { getSession } from "next-auth/react";
 
 export default function drawer() {
       const [isOpen, setIsOpen] = useState(true);
+      const [isAdmin, setIsAdmin] = useState(false);
+      useEffect(() => {
+        const checkAdmin = async () => {
+          const session = await getSession();
+          if (Number(session?.user?.roleId) === 3) {
+            setIsAdmin(true);
+          }
+        };
+
+        checkAdmin();
+      }, []);
   return (
     <>
       <div
@@ -30,8 +40,25 @@ export default function drawer() {
                   General
                 </span>
               </li>
+              <Link href="/post">
+                <li className="flex items-center w-full px-6 py-3 hover:bg-secondary rounded-e-2xl transition-colors cursor-pointer gap-4 h-14">
+                  <FiEdit size={24} className="text-gray-700" />
+                  <span className="text-base font-semibold text-gray-900">
+                    Post
+                  </span>
+                </li>
+              </Link>
+              {isAdmin && (
+                <Link href="/group">
+                  <li className="flex items-center w-full px-6 py-3 hover:bg-secondary rounded-e-2xl transition-colors cursor-pointer gap-4 h-14">
+                    <FiEdit size={24} className="text-gray-700" />
+                    <span className="text-base font-semibold text-gray-900">
+                      Create group
+                    </span>
+                  </li>
+                </Link>
+              )}
             </ul>
-
           </div>
         )}
       </div>
