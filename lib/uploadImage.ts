@@ -1,37 +1,20 @@
-// lib/uploadImage.ts
-import { supabaseClient } from "./supabase"; // Import the Supabase client
-import { nanoid } from "nanoid";
-
-export const uploadImage = async (
+export async function uploadImage(
   file: File,
-  bucketName: string
-): Promise<string | null> => {
-  if (!file) return null;
+  folder: string = "uploads"
+): Promise<string> {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("folder", folder); // Add folder info to send to the API
 
-  const fileExt = file.name.split(".").pop(); // Get file extension
-  const fileName = `${nanoid()}.${fileExt}`; // Generate unique filename
-  const filePath = `uploads/${fileName}`; // Path inside the bucket
+  const res = await fetch("/api/upload", {
+    method: "POST",
+    body: formData,
+  });
 
-  // Upload the file to Supabase Storage
-  const { data, error } = await supabaseClient.storage
-    .from(bucketName)
-    .upload(filePath, file);
-
-  if (error) {
-    console.error("Upload error:", error.message);
-    return null;
+  if (!res.ok) {
+    throw new Error("Image upload failed");
   }
 
-  // Retrieve the public URL for the uploaded file
-  const { data: publicData } = supabaseClient.storage
-    .from(bucketName)
-    .getPublicUrl(filePath);
-
-  if (!publicData) {
-    console.error("Error retrieving public URL: No data returned.");
-    return null;
-  }
-
-  // Return the public URL of the uploaded image
-  return publicData?.publicUrl || null;
-};
+  const data = await res.json();
+  return data.url; // The Cloudinary URL
+}
