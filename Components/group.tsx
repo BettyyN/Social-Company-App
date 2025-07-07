@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createGroup } from "@/lib/createGroup";
 import { FiPlus, FiX } from "react-icons/fi";
+import Link from "next/link";
 
 export default function CreateGroupPopup() {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,6 +25,7 @@ export default function CreateGroupPopup() {
     },
     onError: (err: any) => {
       setError(err?.response?.data?.message || "Something went wrong.");
+      console.error("Error while creating group: ", err);
     },
   });
 
@@ -45,64 +47,57 @@ export default function CreateGroupPopup() {
 
   return (
     <>
-      <button
-        onClick={() => setIsOpen(true)}
-        className="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-primary/80"
-      >
-        <FiPlus /> Create Group
-      </button>
-
-      {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white w-full max-w-md p-6 rounded-xl shadow-lg relative">
-            <button
-              onClick={() => {
-                setIsOpen(false);
-                resetForm();
-              }}
-              className="absolute top-4 right-4 text-gray-500 hover:text-black"
-            >
+      <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div className="bg-white w-full max-w-md p-6 rounded-xl shadow-lg relative">
+          <button
+            onClick={() => {
+              resetForm();
+            }}
+            className="absolute top-4 right-4 text-gray-500 hover:text-black"
+          >
+            <Link href="/home">
               <FiX size={20} />
+            </Link>
+          </button>
+
+          <h2 className="text-xl font-semibold mb-4">Create Group</h2>
+
+          <div className="flex flex-col gap-3">
+            <input
+              type="text"
+              placeholder="Group Name"
+              value={groupName}
+              onChange={(e) => setGroupName(e.target.value)}
+              className="border rounded-md px-3 py-2 w-full"
+            />
+
+            <textarea
+              placeholder="Group Description"
+              value={groupDescription}
+              onChange={(e) => setGroupDescription(e.target.value)}
+              className="border rounded-md px-3 py-2 w-full resize-none"
+            />
+
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setProfilePicture(e.target.files?.[0] || null)}
+              className="w-full"
+            />
+
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+
+            <button
+              onClick={handleSubmit}
+              disabled={mutation.status === "pending"}
+              className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90"
+            >
+              {mutation.status === "pending" ? "Creating..." : "Create Group"}
             </button>
-
-            <h2 className="text-xl font-semibold mb-4">Create Group</h2>
-
-            <div className="flex flex-col gap-3">
-              <input
-                type="text"
-                placeholder="Group Name"
-                value={groupName}
-                onChange={(e) => setGroupName(e.target.value)}
-                className="border rounded-md px-3 py-2 w-full"
-              />
-
-              <textarea
-                placeholder="Group Description"
-                value={groupDescription}
-                onChange={(e) => setGroupDescription(e.target.value)}
-                className="border rounded-md px-3 py-2 w-full resize-none"
-              />
-
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setProfilePicture(e.target.files?.[0] || null)}
-                className="w-full"
-              />
-
-              {error && <p className="text-red-500 text-sm">{error}</p>}
-
-              <button
-                onClick={handleSubmit}
-                disabled={mutation.status === "pending"}
-                className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90"
-              >
-                {mutation.status === "pending" ? "Creating..." : "Create Group"}
-              </button>
-            </div>
           </div>
         </div>
-      )}
+      </div>
+      {/* )} */}
     </>
   );
 }
