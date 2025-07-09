@@ -11,6 +11,12 @@ export async function POST(req: NextRequest) {
     const picture = formData.get("picture") as File | null;
     const groupId = Number(formData.get("groupId"))
 
+    console.log("title:", title);
+    console.log("description:", description);
+    console.log("authorId:", authorId);
+    console.log("groupId:", groupId);
+    console.log("picture:", picture);
+
     if (!title || !description || !authorId) {
       return NextResponse.json(
         { error: "title, description, and authorId are required" },
