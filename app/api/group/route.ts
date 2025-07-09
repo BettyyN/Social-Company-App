@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
 
     let profilePictureUrl: string | null = null;
     if (profilePicture) {
+      console.log("profilePicture:")
       profilePictureUrl = await uploadImage(
        profilePicture,
         "group-profiles"
