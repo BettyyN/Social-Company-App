@@ -92,6 +92,13 @@ export async function GET(req: NextRequest) {
       orderBy: {
         postId: "asc",
       },
+      include:{
+        userPosts:{
+          include:{
+            user: true,
+          }
+        }
+      }
     });
     return NextResponse.json(posts, { status: 200 });
   } catch (error) {
