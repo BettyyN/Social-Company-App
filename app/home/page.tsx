@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import HomeHeader from "@/Components/homeheader";
 import User from "@/Components/user";
 import ChatDrawer from "@/Components/chatDrawer";
+import PostList from "@/Components/Post/postList";
 
 
 export default async function page() {
@@ -27,7 +28,7 @@ export default async function page() {
               <HomeHeader userName={userName} />
             </div>
             <div className="md:mx-15 ">
-              <PostCard />
+              <PostList />
             </div>
           </div>
           <div className="flex-1 shadow-purple-100 shadow-lg bg-slate-50">
