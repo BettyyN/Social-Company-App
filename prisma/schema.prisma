@@ -44,7 +44,7 @@ model Post {
   title       String
   description String
   picture     String?
-  authorId    Int
+  authorId    Int 
   createdAt  DateTime @default(now())
   group       Group?    @relation(fields: [groupId], references: [groupId])
   groupId     Int?
