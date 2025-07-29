@@ -46,6 +46,7 @@ export default function drawer() {
                   <span className="text-base font-semibold text-gray-900">
                     Post
                   </span>
+                  
                 </li>
               </Link>
               {isAdmin && (
