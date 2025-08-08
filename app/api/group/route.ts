@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { uploadImage } from "@/lib/uploadImage"; 
+import path from "path";
+import { writeFile } from "fs/promises";
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,11 +34,12 @@ export async function POST(req: NextRequest) {
 
     let profilePictureUrl: string | null = null;
     if (profilePicture) {
-      console.log("profilePicture:")
-      profilePictureUrl = await uploadImage(
-       profilePicture,
-        "group-profiles"
-      );
+      const bytes = await profilePicture.arrayBuffer();
+           const buffer= Buffer.from(bytes);
+           const fileName = `${Date.now()}-${profilePicture.name};`;
+           const uploadDir=path.join(process.cwd(),"public/uploads");
+          await writeFile(`${uploadDir}/${fileName}`, buffer);
+          profilePictureUrl = `/uploads/${fileName}`;
 
       if (!profilePictureUrl) {
         return NextResponse.json(

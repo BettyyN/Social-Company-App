@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
 import { uploadImage } from "@/lib/uploadImage";
+import { writeFile } from "fs/promises";
 import { NextRequest, NextResponse } from "next/server";
+import path from "path";
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,8 +29,12 @@ export async function POST(req: NextRequest) {
     // Optional image upload
     let pictureUrl: string | null = null;
     if (picture) {
-      pictureUrl = await uploadImage(picture, "post-images");
-
+      const bytes = await picture.arrayBuffer();
+      const buffer= Buffer.from(bytes);
+      const fileName =`${Date.now()}-${picture.name};`
+      const uploadDir=path.join(process.cwd(),"public/uploads");
+     await writeFile(`${uploadDir}/${fileName}`, buffer);
+     pictureUrl = `/uploads/${fileName}`;
       if (!pictureUrl) {
         return NextResponse.json(
           { error: "Failed to upload image" },
