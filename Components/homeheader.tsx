@@ -7,7 +7,7 @@ export default function HomeHeader({ userName }: { userName: string })
 {
   return (
     <>
-      <header className="shadow-sm bg-[#F4F0FF] text-primary opacity-80 sticky top-0 z-50  rounded-2xl flex">
+      <header className="shadow-sm bg-[#F4F0FF] text-primary opacity-80 sticky top-0 z-50  rounded-2xl flex ">
         <div className="text-sm w-1/3 md:w-1/4 p-5 md:text-lg">
           <span className="flex">Selam, {userName}</span>
         </div>
