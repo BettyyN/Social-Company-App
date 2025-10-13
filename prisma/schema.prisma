@@ -37,6 +37,17 @@ model User {
   Advertisement Advertisement[]
   notificationsReceived Notification[] @relation("NotificationRecipient")
   notificationsSent     Notification[] @relation("NotificationSender")
+
+  RefreshToken RefreshToken[]
+}
+
+model RefreshToken {
+  id Int @id @default(autoincrement())
+  token String @unique
+  userId Int 
+  user User @relation(fields: [userId], references: [userId])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }
 
 model Post {
