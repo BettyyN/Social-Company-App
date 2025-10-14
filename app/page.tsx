@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import heroBackground from "../public/nature.jpg";
-import rose from "../public/r1.jpg";
+import heroBackground from "../public/new.jpg";
+import rose from "../public/nn.jpg";
 import Header from "../Components/header";
 import { useRouter } from "next/navigation";
 import ContactUs from "@/Components/contactUs";
@@ -48,12 +48,12 @@ export default function Home() {
           <Image
             src={rose}
             alt="Begenra Institute Background"
-            className="h-72 w-44 translate-4 rounded-lg"
+            className="h-80 w-60 translate-5 rounded-lg"
           />
           <Image
             src={heroBackground}
             alt="Begenra Institute Background"
-            className="h-72 w-44 rounded-lg"
+            className="h-80 w-50 rounded-lg"
           />
         </div>
       </div>
