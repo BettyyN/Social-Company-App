@@ -1,48 +1,28 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createGroup } from "@/lib/createGroup";
 import { FiPlus, FiX } from "react-icons/fi";
 import Link from "next/link";
+import { useCreateGroup } from "@/queries/group";
 
 export default function CreateGroupPopup() {
   const [isOpen, setIsOpen] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
 
-  const queryClient = useQueryClient();
+ const { mutate: createGroup, isPending, isError, error, isSuccess } = useCreateGroup();  
 
-  const mutation = useMutation({
-    mutationFn: createGroup,
-    onSuccess: (data) => {
-      console.log("Group created:", data);
-      queryClient.invalidateQueries({ queryKey: ["groups"] });
-      setIsOpen(false);
-      resetForm();
-    },
-    onError: (err: any) => {
-      setError(err?.response?.data?.message || "Something went wrong.");
-      console.error("Error while creating group: ", err);
-    },
-  });
-
-  const handleSubmit = () => {
-    if (!groupName || !groupDescription) {
-      setError("All fields are required.");
-      return;
-    }
-
-    mutation.mutate({ groupName, groupDescription, profilePicture });
-  };
-
+   const handleSubmit = (e: React.FormEvent) => {
+     e.preventDefault();
+     createGroup({ groupName, groupDescription, profilePicture });
+   };
   const resetForm = () => {
     setGroupName("");
     setGroupDescription("");
     setProfilePicture(null);
-    setError("");
+    // setError("");
   };
 
   return (
@@ -62,7 +42,7 @@ export default function CreateGroupPopup() {
 
           <h2 className="text-xl font-semibold mb-4">Create Group</h2>
 
-          <div className="flex flex-col gap-3">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
             <input
               type="text"
               placeholder="Group Name"
@@ -85,16 +65,22 @@ export default function CreateGroupPopup() {
               className="w-full"
             />
 
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-
+            {isError && (
+              <p className="text-red-500 text-sm">
+                {error instanceof Error ? error.message : "An error occurred."}
+              </p>
+            )}
+            {isSuccess && (
+              <p className="text-green-600 text-sm">✅ Group created!</p>
+            )}
             <button
-              onClick={handleSubmit}
-              disabled={mutation.status === "pending"}
+              type="submit"
+              disabled={isPending}
               className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90"
             >
-              {mutation.status === "pending" ? "Creating..." : "Create Group"}
+              {isPending ? "Creating..." : "Create Group"}
             </button>
-          </div>
+          </form>
         </div>
       </div>
       {/* )} */}
