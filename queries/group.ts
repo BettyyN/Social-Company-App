@@ -1,77 +1,109 @@
-import api from "@/lib/api/axiosInstance";
+// hooks/useGroup.ts
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import api from "@/lib/api/axiosInstance";
+import { Group } from "@/Types/group";
+import axios from "axios";
 
-
-// Fetch all Groupss
-export const useGetAllGroups= () => {
-  return useQuery<Groups[]>("Groups", async () => {
-    const response = await api.get("/Groups/");
-    return response.data;
+// --- Fetch all groups ---
+export const useGetAllGroups = () => {
+  return useQuery<Group[]>({
+    queryKey: ["groups"],
+    queryFn: async () => {
+      const response = await api.get("/group");
+      return response.data as Group[];
+    },
   });
 };
-// Fetch a Groups by ID
-export const useGetGroupsById = (id: number) => {
-  return useQuery<Groups>(["Groups", id], async () => {
-    const response = await api.get(`/Groups/${id}`);
-    return response.data;
+
+// --- Fetch a single group by ID ---
+export const useGetGroupById = (groupId: string) => {
+  return useQuery<Group>({
+    queryKey: ["group", groupId],
+    queryFn: async () => {
+      const response = await api.get(`/group/${groupId}`);
+      return response.data as Group;
+    },
+    enabled: !!groupId, // prevents running with undefined ID
   });
 };
 
-// Create a new Groups
-export const useCreateGroups = () => {
+// --- Create a new group ---
+export type CreateGroupInput = Omit<
+  Group,
+  "groupId" | "createdAt" | "deletedAt"
+>;
+
+export const useCreateGroup = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    async (
-      newGroups: Omit<Groups, "ID" | "CreatedAt" | "UpdatedAt" | "DeletedAt">
-    ) => {
-      const response = await api.post("/Groups/", newGroups);
+  return useMutation({
+    // 🔹 mutation function — same logic you already had
+    mutationFn: async ({
+      groupName,
+      groupDescription,
+      profilePicture,
+    }: Omit<Group, "groupId" | "createdAt" | "deletedAt">) => {
+      const formData = new FormData();
+      formData.append("groupName", groupName);
+      formData.append("groupDescription", groupDescription);
+      if (profilePicture) {
+        formData.append("profilePicture", profilePicture);
+      }
+
+      const response = await axios.post("/api/group", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
       return response.data;
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("Groupss");
-      },
-    }
-  );
+
+    // 🔹 what happens on success
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["groups"] }); // refresh groups list
+    },
+
+    // 🔹 optional: handle errors
+    onError: (error) => {
+      console.error("Failed to create group:", error);
+    },
+  });
 };
 
-// Update a Groups by ID
-export const useUpdateGroups = () => {
+// --- Update a group ---
+export type UpdateGroupInput = Partial<CreateGroupInput>;
+
+export const useUpdateGroup = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    async ({
-      id,
-      updatedGroups,
+  return useMutation({
+    mutationFn: async ({
+      groupId,
+      updatedGroup,
     }: {
-      id: number;
-      updatedGroups: Partial<Groups>;
+      groupId: string;
+      updatedGroup: UpdateGroupInput;
     }) => {
-      const response = await api.put(`/Groups/${id}`, updatedGroups);
-      return response.data;
+      const response = await api.put(`/group/${groupId}`, updatedGroup);
+      return response.data as Group;
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("Groups");
-      },
-    }
-  );
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["group", variables.groupId] });
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
+    },
+  });
 };
 
-// Delete a Groups by ID
-export const useDeleteGroups = () => {
+// --- Delete a group ---
+export const useDeleteGroup = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    async (id: number) => {
-      const response = await api.delete(`/Groups/${id}`);
+  return useMutation({
+    mutationFn: async (groupId: string) => {
+      const response = await api.delete(`/group/${groupId}`);
       return response.data;
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("Groupss");
-      },
-    }
-  );
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["group"] });
+    },
+  });
 };
