@@ -76,12 +76,17 @@ export async function GET(req: NextRequest) {
         },
       });
       if (!group) {
-        return NextResponse.json({ error: "group not found" }, { status: 404 });
+        // If not found, return empty array instead of object
+        return NextResponse.json({ error: "Group not found" }, { status: 404 });
       }
-      return NextResponse.json(group, { status: 200 });
+
+      return NextResponse.json(group, { status: 200 }); // wrap in array
     }
     
     const groups = await db.group.findMany({
+      where:{
+          deletedAt:null,
+      },
       orderBy: {
         groupId: "asc",
       },

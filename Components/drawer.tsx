@@ -4,9 +4,13 @@ import { FiMessageSquare,FiEdit, FiSettings, FiMenu, FiX, FiPhone } from "react-
 import Link from "next/link";
 import { getSession } from "next-auth/react";
 import { useSession } from "next-auth/react";
+import { setActiveSection } from "@/redux/slices/uiSlice";
+import { useDispatch } from "react-redux";
+
 export default function drawer() {
       const [isOpen, setIsOpen] = useState(true);
       const { data: session, status } = useSession();
+      const dispatch = useDispatch();
 
       // Show loading until session is available
       if (status === "loading") {
@@ -55,14 +59,14 @@ export default function drawer() {
                       </span>
                     </li>
                   </Link>
-                  <Link href="/group">
-                    <li className="flex items-center w-full px-6 py-3 hover:bg-secondary rounded-e-2xl transition-colors cursor-pointer gap-4 h-14">
+                    <li className="flex items-center w-full px-6 py-3 hover:bg-secondary rounded-e-2xl transition-colors cursor-pointer gap-4 h-14"
+                    onClick={() => dispatch(setActiveSection("groups"))}>
                       <FiEdit size={24} className="text-gray-700" />
                       <span className="text-base font-semibold text-gray-900">
                         Groups
                       </span>
                     </li>
-                  </Link>
+                  
                 </>
               )}
             </ul>

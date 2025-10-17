@@ -4,6 +4,7 @@ import "./globals.css";
 import ReduxProvider from "../Components/reduxProvider";
 import { Toaster } from "sonner";
 import Provider from "@/Components/provider";
+import { AuthInitializer } from "@/Components/AuthInitializer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +35,10 @@ export default function RootLayout({
         cz-shortcut-listen="true"
       >
         <Provider>
-          <ReduxProvider>{children}</ReduxProvider>
+          <ReduxProvider>
+            <AuthInitializer />
+            {children}
+          </ReduxProvider>
           <Toaster position="top-center" richColors />
         </Provider>
       </body>

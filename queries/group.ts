@@ -9,8 +9,11 @@ export const useGetAllGroups = () => {
   return useQuery<Group[]>({
     queryKey: ["groups"],
     queryFn: async () => {
-      const response = await api.get("/group");
-      return response.data as Group[];
+      const response = await api.get("/api/group");
+     const data = response.data;
+
+     // ✅ ensure always an array
+     return Array.isArray(data) ? data : [];
     },
   });
 };
@@ -20,7 +23,7 @@ export const useGetGroupById = (groupId: string) => {
   return useQuery<Group>({
     queryKey: ["group", groupId],
     queryFn: async () => {
-      const response = await api.get(`/group/${groupId}`);
+      const response = await api.get(`/api/group/${groupId}`);
       return response.data as Group;
     },
     enabled: !!groupId, // prevents running with undefined ID
