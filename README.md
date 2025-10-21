@@ -1,5 +1,6 @@
 # Social-Company-App
-- Social connecting app specific for company
+- Social connecting app specific for company.
+
 Social Company App is a private internal platform built for a single company and its employees. It allows staff members to connect, communicate, and stay updated with the company’s latest news, events, and announcements — all in one place.
 
 🌟 Purpose
