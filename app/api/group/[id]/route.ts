@@ -3,10 +3,11 @@ import { uploadImage } from "@/lib/uploadImage";
 import { NextRequest, NextResponse } from "next/server";
 
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const {id}= await params;
     const formData = await request.formData();
-    const groupId = Number(params.id);
+    const groupId = Number(id);
     const groupName= formData.get("groupName") as string | null;
     const groupDescription = formData.get("groupDescription") as string | null;
     const profilePicture = (formData.get("profilePicture") as File) || null;
@@ -16,28 +17,35 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
             {status:400}
         )
     }
-    let profilePictureUrl: string | null = null;
-        if (profilePicture) {
-          profilePictureUrl = await uploadImage(
+       let profilePictureUrl: string | undefined; // declare outside
+
+       if (profilePicture) {
+         profilePictureUrl = await uploadImage(
            profilePicture,
-            "group-profiles"
-          );
-    
-          if (!profilePictureUrl) {
-            return NextResponse.json(
-              { error: "Error uploading profile picture" },
-              { status: 400 }
-            );
-          }
-        }
-    const updatedGroup = await db.group.update({
-      where: { groupId: groupId },
-      data: {
-        groupName: groupName ?? undefined,
-        groupDescription: groupDescription ?? undefined,
-        profilePicture: profilePictureUrl ,
-      },
-    });
+           "group-profiles"
+         );
+
+         if (!profilePictureUrl) {
+           return NextResponse.json(
+             { error: "Error uploading profile picture" },
+             { status: 400 }
+           );
+         }
+       }
+
+       const dataToUpdate: any = {
+         groupName: groupName ?? undefined,
+         groupDescription: groupDescription ?? undefined,
+       };
+
+       if (profilePictureUrl) {
+         dataToUpdate.profilePicture = profilePictureUrl;
+       }
+
+       const updatedGroup = await db.group.update({
+         where: { groupId: groupId },
+         data: dataToUpdate,
+       });
     if(!updatedGroup){
         return NextResponse.json({message:"group not found"},{status:400})
     }
