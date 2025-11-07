@@ -11,25 +11,25 @@ export default function HomePageClient({ userName }: { userName: string }) {
   const activeSection = useAppSelector((state) => state.ui.activeSection);
 
   return (
-    <div className="flex-row h-screen bg-[#FDFDFD] overflow-hidden grid grid-cols-[15%_65%_20%]">
+    <div className="flex h-screen bg-[#FDFDFD] overflow-hidden">
       {/* Left Drawer */}
-      <div className="flex">
+      <div className="w-1/5 min-w-[200px] border-r border-gray-200">
         <Drawer />
       </div>
 
       {/* Middle Content */}
-      <div className="flex-1 overflow-y-auto transition-margin duration-300">
-        <div className="md:mx-5">
+      <div className="flex-1 overflow-y-auto p-4">
+        <div className="mb-6">
           <HomeHeader userName={userName} />
         </div>
 
-        <div className="md:mx-15">
+        <div>
           {activeSection === "groups" ? <GroupsPage /> : <PostList />}
         </div>
       </div>
 
       {/* Right Chat Drawer */}
-      <div className="flex-1 shadow-purple-100 shadow-lg bg-slate-50">
+      <div className="w-1/4 min-w-[250px] border-l border-gray-200 bg-white shadow-lg">
         <ChatDrawer />
       </div>
     </div>

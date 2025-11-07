@@ -72,8 +72,8 @@ export const useCreateGroup = () => {
   });
 };
 
-// --- Update a group ---
-export type UpdateGroupInput = Partial<CreateGroupInput>;
+
+
 
 export const useUpdateGroup = () => {
   const queryClient = useQueryClient();
@@ -81,13 +81,13 @@ export const useUpdateGroup = () => {
   return useMutation({
     mutationFn: async ({
       groupId,
-      updatedGroup,
+      userData,
     }: {
       groupId: string;
-      updatedGroup: UpdateGroupInput;
+      userData: FormData;
     }) => {
-      const response = await api.put(`/group/${groupId}`, updatedGroup);
-      return response.data as Group;
+      const response = await api.put(`/api/group/${groupId}`, userData);
+      return response.data;
     },
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["group", variables.groupId] });

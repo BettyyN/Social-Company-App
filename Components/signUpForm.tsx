@@ -5,10 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { user, UserFormData } from "../schema/user";
 import { useEffect, useState } from "react";
 import { Eye, EyeOff, Loader } from "lucide-react";
-import { useSignupMutation } from "../redux/api/authApi";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
+import api from "../lib/api/axiosInstance"; // Import the axios instance
 
 export default function SignupForm() {
   const {
@@ -31,37 +31,41 @@ export default function SignupForm() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [signup, { isLoading }] = useSignupMutation();
+  const [isLoading, setIsLoading] = useState(false); // Manage loading state locally
 
   const onSubmit = async (data: UserFormData) => {
+    setIsLoading(true);
     try {
       const formData = new FormData();
       Object.entries(data).forEach(([key, value]) =>
         formData.append(key, value)
       );
-      formData.append("roleId", "1");
+      formData.append("roleId", "1"); // Assuming default roleId is 1
 
-      const response = await signup(formData).unwrap();
+      const response = await api.post("/api/user", formData); // Direct Axios POST request
 
-      if (response.success) {
+      if (response.data.success) {
         toast.success("Account created successfully!");
         router.push("/auth/login");
       }
     } catch (err: any) {
       let errorMessage = "Registration failed. Please try again.";
-      if (err.data?.details) errorMessage = err.data.details;
-      else if (err.data?.message) errorMessage = err.data.message;
-      else if (err.status === 400) errorMessage = "Invalid input.";
+      if (err.response?.data?.details) errorMessage = err.response.data.details;
+      else if (err.response?.data?.message) errorMessage = err.response.data.message;
+      else if (err.response?.status === 400) errorMessage = "Invalid input.";
+      else if (err.message) errorMessage = err.message;
 
       toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="flex items-center justify-center">
-      <div className="p-8 rounded-lg w-full max-w-xl">
-        <h2 className="text-2xl font-semibold text-center mb-6">
-          Create Account
+      <div className="p-8 w-full">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
+          Create Your Account
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -70,21 +74,14 @@ export default function SignupForm() {
             <div className="relative">
               <input
                 type="text"
-                placeholder=" "
                 {...register("firstName")}
-                className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md py-3 px-3 peer focus:outline-none focus:ring-2 ${
                   errors.firstName
                     ? "border-red-400 focus:ring-red-400"
-                    : "border-gray-300 focus:ring-primary"
+                    : "border-gray-300 focus:ring-purple-500"
                 }`}
               />
-              <label
-                className="absolute left-3 text-sm text-gray-600 transition-all 
-                peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base 
-                peer-placeholder-shown:text-gray-400 
-                peer-focus:top-1 peer-focus:text-xs peer-focus:text-primary
-                "
-              >
+              <label className="absolute left-3 top-0 px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-2 peer-focus:bg-white transition-all">
                 First Name *
               </label>
               {errors.firstName && (
@@ -98,21 +95,14 @@ export default function SignupForm() {
             <div className="relative">
               <input
                 type="text"
-                placeholder=" "
                 {...register("lastName")}
-                className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md py-3 px-3 peer focus:outline-none focus:ring-2 ${
                   errors.lastName
                     ? "border-red-400 focus:ring-red-400"
-                    : "border-gray-300 focus:ring-primary"
+                    : "border-gray-300 focus:ring-purple-500"
                 }`}
               />
-              <label
-                className="absolute left-3 text-sm text-gray-600 transition-all 
-                peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base 
-                peer-placeholder-shown:text-gray-400 
-                peer-focus:top-1 peer-focus:text-xs peer-focus:text-primary
-                "
-              >
+              <label className="absolute left-3 top-0 px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-2 peer-focus:bg-white transition-all">
                 Last Name *
               </label>
               {errors.lastName && (
@@ -126,21 +116,14 @@ export default function SignupForm() {
             <div className="relative">
               <input
                 type="email"
-                placeholder=" "
                 {...register("email")}
-                className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md py-3 px-3 peer focus:outline-none focus:ring-2 ${
                   errors.email
                     ? "border-red-400 focus:ring-red-400"
-                    : "border-gray-300 focus:ring-primary"
+                    : "border-gray-300 focus:ring-purple-500"
                 }`}
               />
-              <label
-                className="absolute left-3 text-sm text-gray-600 transition-all 
-                peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base 
-                peer-placeholder-shown:text-gray-400 
-                peer-focus:top-1 peer-focus:text-xs peer-focus:text-primary
-                "
-              >
+              <label className="absolute left-3 top-0 px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-2 peer-focus:bg-white transition-all">
                 Email *
               </label>
               {errors.email && (
@@ -154,21 +137,14 @@ export default function SignupForm() {
             <div className="relative">
               <input
                 type="tel"
-                placeholder=" "
                 {...register("phoneNumber")}
-                className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
+                className={`w-full border rounded-md py-3 px-3 peer focus:outline-none focus:ring-2 ${
                   errors.phoneNumber
                     ? "border-red-400 focus:ring-red-400"
-                    : "border-gray-300 focus:ring-primary"
+                    : "border-gray-300 focus:ring-purple-500"
                 }`}
               />
-              <label
-                className="absolute left-3 text-sm text-gray-600 transition-all 
-                peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base 
-                peer-placeholder-shown:text-gray-400 
-                peer-focus:top-1 peer-focus:text-xs peer-focus:text-primary
-                "
-              >
+              <label className="absolute left-3 top-0 px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-2 peer-focus:bg-white transition-all">
                 Phone Number *
               </label>
               {errors.phoneNumber && (
@@ -184,26 +160,19 @@ export default function SignupForm() {
               <div className="relative w-full">
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder=" "
                   {...register("password")}
-                  className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
+                  className={`w-full border rounded-md py-3 px-3 peer focus:outline-none focus:ring-2 ${
                     errors.password
                       ? "border-red-400 focus:ring-red-400"
-                      : "border-gray-300 focus:ring-primary"
+                      : "border-gray-300 focus:ring-purple-500"
                   }`}
                 />
-                <label
-                  className="absolute left-3 text-sm text-gray-600 transition-all 
-                  peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base 
-                  peer-placeholder-shown:text-gray-400 
-                  peer-focus:top-1 peer-focus:text-xs peer-focus:text-primary
-                  "
-                >
+                <label className="absolute left-3 top-0 px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-2 peer-focus:bg-white transition-all">
                   Password *
                 </label>
                 <button
                   type="button"
-                  className="absolute right-3 top-4"
+                  className="absolute right-3 top-3"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <Eye size={16} /> : <EyeOff size={16} />}
@@ -219,26 +188,19 @@ export default function SignupForm() {
               <div className="relative w-full">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
-                  placeholder=" "
                   {...register("confirmPassword")}
-                  className={`w-full border rounded-md px-3 pt-5 pb-2 peer focus:outline-none focus:ring-2 ${
+                  className={`w-full border rounded-md py-3 px-3 peer focus:outline-none focus:ring-2 ${
                     errors.confirmPassword
                       ? "border-red-400 focus:ring-red-400"
-                      : "border-gray-300 focus:ring-primary"
+                      : "border-gray-300 focus:ring-purple-500"
                   }`}
                 />
-                <label
-                  className="absolute left-3 text-sm text-gray-600 transition-all 
-                  peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base 
-                  peer-placeholder-shown:text-gray-400 
-                  peer-focus:top-1 peer-focus:text-xs peer-focus:text-primary
-                  "
-                >
+                <label className="absolute left-3 top-0 px-1 text-sm text-gray-600 peer-focus:text-purple-600 peer-focus:-translate-y-2 peer-focus:bg-white transition-all">
                   Confirm Password *
                 </label>
                 <button
                   type="button"
-                  className="absolute right-3 top-4"
+                  className="absolute right-3 top-3"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? (
@@ -260,7 +222,7 @@ export default function SignupForm() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="bg-[#7300ff] text-white py-2 rounded-md shadow-md hover:scale-105 transition-transform mt-3 w-11/12 items-center"
+                className="w-full bg-[#7300ff] text-white py-3 rounded-lg shadow-md hover:bg-[#6000d4] transition-colors duration-300"
               >
                 {isLoading ? (
                   <Loader size={20} className="animate-spin" />
@@ -272,12 +234,12 @@ export default function SignupForm() {
           </div>
         </form>
 
-        <h3 className="text-sm font-semibold text-center text-gray-700 my-3">
+        <p className="text-center text-gray-600 mt-6">
           Already have an account?{" "}
-          <Link href="/auth/login" className="hover:underline text-[#7300ff]">
+          <Link href="/auth/login" className="text-[#7300ff] hover:underline font-medium">
             Login
           </Link>
-        </h3>
+        </p>
       </div>
     </div>
   );

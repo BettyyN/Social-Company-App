@@ -1,3 +1,6 @@
+import { headers } from "next/headers";
+import api from "./api/axiosInstance";
+
 export async function uploadImage(
   file: File,
   folder: string = "uploads"
@@ -6,15 +9,18 @@ export async function uploadImage(
   formData.append("file", file);
   formData.append("folder", folder); // Add folder info to send to the API
 
-  const res = await fetch("/api/upload", {
-    method: "POST",
-    body: formData,
+  
+try{
+const res = await api.post("/api/upload", formData ,{
+    headers:{
+      "Content-Type":"multipart/form-data"
+    },
   });
-
-  if (!res.ok) {
-    throw new Error("Image upload failed");
-  }
-
-  const data = await res.json();
-  return data.url; // The Cloudinary URL
+return res.data.url;
 }
+catch(error){
+  console.error("Image upload failed:",error);
+  throw new Error("Image upload failed");
+}
+}
+  
