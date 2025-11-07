@@ -4,17 +4,17 @@ import LoginForm from "@/Components/loginForm";
 export default function page() {
   return (
     <>
-      <div className="bg-[#F5F7FA] min-h-screen ">
+      <div className="bg-[#F5F7FA] min-h-screen flex flex-col">
         <Header />
-        <div className="flex lg:flex-row flex-col  items-center mt-20">
-          <div className="lg:w-1/3 w-full">
+        <div className="flex flex-1 flex-col lg:flex-row items-center justify-center p-4">
+          <div className="lg:w-1/2 w-full flex justify-center mb-8 lg:mb-0">
             <img
               src="/login.png"
-              alt="signup"
-              className="lg:absolute lg:w-[500px] lg:h-[500px] lg:top-1/2 lg:left-1/6 transform lg:-translate-x-1/3 lg:-translate-y-1/2"
+              alt="Login Illustration"
+              className="max-w-xs lg:max-w-md h-auto"
             />
           </div>
-          <div className="lg:w-1/3 w-full rounded-tr-3xl rounded-br-3xl shadow-[#7300ff] shadow-sm bg-white]">
+          <div className="lg:w-1/2 w-full max-w-md rounded-lg shadow-lg bg-white p-8">
             <LoginForm />
           </div>
         </div>
