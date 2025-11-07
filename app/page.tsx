@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import heroBackground from "../public/new.jpg";
-import rose from "../public/nn.jpg";
+import heroBackground from "../public/r1.jpg";
+import rose from "../public/nature.jpg";
 import Header from "../Components/header";
 import { useRouter } from "next/navigation";
 import ContactUs from "@/Components/contactUs";
