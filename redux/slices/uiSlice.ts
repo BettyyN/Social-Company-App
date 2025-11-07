@@ -2,10 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UIState {
   activeSection: "general" | "posts" | "groups" | "create-group" | null;
+  isDrawerOpen: boolean;
 }
 
 const initialState: UIState = {
   activeSection: "general",
+  isDrawerOpen: true, // Drawer starts open by default
 };
 
 const uiSlice = createSlice({
@@ -18,8 +20,11 @@ const uiSlice = createSlice({
     ) => {
       state.activeSection = action.payload;
     },
+    toggleDrawer: (state) => {
+      state.isDrawerOpen = !state.isDrawerOpen;
+    },
   },
 });
 
-export const { setActiveSection } = uiSlice.actions;
+export const { setActiveSection, toggleDrawer } = uiSlice.actions;
 export default uiSlice.reducer;
