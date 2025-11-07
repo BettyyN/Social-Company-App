@@ -30,10 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        cz-shortcut-listen="true"
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Provider>
           <ReduxProvider>
             <AuthInitializer />
