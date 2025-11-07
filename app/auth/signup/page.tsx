@@ -4,17 +4,17 @@ import SignupForm from "@/Components/signUpForm";
 export default function page() {
   return (
     <>
-      <div className="bg-slate-50 min-h-screen">
+      <div className="bg-[#F5F7FA] min-h-screen flex flex-col">
         <Header />
-        <div className=" flex lg:flex-row flex-col">
-          <div className="lg:w-2/5 w-full flex justify-center items-center">
+        <div className="flex flex-1 flex-col lg:flex-row items-center justify-center p-4">
+          <div className="lg:w-1/2 w-full flex justify-center mb-8 lg:mb-0">
             <img
               src="/signup.png"
-              alt="signup"
-              className=" lg:w-[410px] lg:h-[410px] lg:top-3/5  z-10"
+              alt="Signup Illustration"
+              className="max-w-xs lg:max-w-md h-auto"
             />
           </div>
-          <div className="lg:w-2/5 w-full  shadow-[#e1d6fe] shadow-lg rounded-tl-3xl rounded-bl-3xl px-5">
+          <div className="lg:w-1/2 w-full max-w-lg rounded-lg shadow-lg bg-white p-8">
             <SignupForm />
           </div>
         </div>
