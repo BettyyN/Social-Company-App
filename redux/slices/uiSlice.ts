@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UIState {
-  activeSection: "general" | "posts" | "groups" | "create-group" | null;
+  activeSection: "general" | "posts" | "groups" | "create-post" | "create-group" | null;
   isDrawerOpen: boolean;
 }
 
