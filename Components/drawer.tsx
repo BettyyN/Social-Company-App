@@ -64,6 +64,14 @@ export default function DrawerComponent() { // Renamed to avoid conflict with HT
                   </span>
                 </li>
               </Link>
+              {/* New "Create Post" item */}
+              <li className={getNavItemClasses("create-post")}
+                  onClick={() => dispatch(setActiveSection("create-post"))}>
+                <PlusSquare size={24} className={getIconColorClass("create-post")} /> {/* Reusing PlusSquare icon for now */}
+                <span className="text-base font-semibold">
+                  Create Post
+                </span>
+              </li>
               {isAdmin && (
                 <>
                   <Link href="/group">
